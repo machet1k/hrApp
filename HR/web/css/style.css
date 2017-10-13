@@ -1,0 +1,146 @@
+body {
+    font-family: monospace;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h3 span {
+    color: #d5d5d5;
+}
+
+h4 span {
+    cursor:pointer;
+}
+
+ul li {
+    list-style-type: none;
+}
+
+ul {
+    padding-left: 15px;
+}
+
+label {
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    padding: 2px 5px 2px 2px;
+    border-radius: 10px;
+}
+
+input[type=radio] {
+    margin: 2px 4px;
+}
+
+.scalable label:hover {
+    transform: scale(1.05);
+}
+
+.panel-heading {
+    border: 1px red solid;
+    font-size: 1.5em;
+}
+
+.align_center {
+    margin-top: 30px;
+    text-align: center;
+    font: 20pt monospace;
+}
+
+.align_right {
+    float: right;
+}
+
+.logo {
+    color: #e6e6e6;
+    letter-spacing: -10px;
+    margin-bottom: 0;
+    font: 800 120px Tahoma;
+}
+
+.stroke  {
+    float: left; 
+}
+
+.stroke div {
+    float: left; 
+    width: 99px; 
+    height: 25px;
+    text-align: center;
+}
+.header {
+    font-weight: 900;
+    font-size: 16px;
+}
+
+hr {
+    color: #eee; /*для IE */
+    background-color: #eee; /*для Firefox, Opera, Safari*/
+    border:0px none;
+    height:1px; /* высота 1px IE, Firefox, Opera, Safari */
+    clear:both; /* для очистки, если тег идет после float елемента */
+}
+
+#month {
+    font-size: 16px;
+
+}
+
+.container80 {
+    width: 1170px;
+    margin: 0 auto;
+}
+
+.panel-body {
+    height: 815px;
+    overflow: auto;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+#date, #time {
+    width: 260px;
+    float: left;
+    padding: 10px;
+}
+
+#candidates {
+    width: 680px;
+    float: left;
+    padding: 10px;
+}
+
+body {
+    background-size:cover;
+    background-position:top center;
+    background-attachment:fixed;
+    background-repeat:no-repeat;
+    /*background-image: url("https://ucarecdn.com/54a5fc80-5ca1-43d1-b27f-e3a398d171f0/");
+    ackground-image: url("https://ucarecdn.com/54a5fc80-5ca1-43d1-b27f-e3a398d171f0/");
+*/}
+
+.logimg {
+    position: absolute;
+    width: 200px;
+    top: 820px;
+    left:1680px;
+    opacity: 0.4;
+}
+
+.logimg:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.branch {
+    margin: 6px 12px;
+}
+
+.sign {
+    margin: 0 auto;
+    text-align: center;
+    color: #fff;
+}
+/* СТИЛИ ДЛЯ РАДИО */
+
