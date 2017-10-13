@@ -9,11 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/Download")
 public class Download extends AbstractServlet {
-    
-    String url = "jdbc:derby://localhost:1527/hrdb";
-    String username = "root";
-    String password = "bcenter";
- 
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
  

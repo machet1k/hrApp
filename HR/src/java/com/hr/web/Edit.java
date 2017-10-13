@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,21 +28,22 @@ public class Edit extends AbstractServlet {
         String candidateNumber = (String) request.getSession().getAttribute("number");
         String queryStatus = "";
         
+        
+
         switch (action) {
 
             case "Delete":
                 String query = "delete from candidates where phonenumber = '" + phonenumber + "'";
                 queryStatus = "delete from statuses where phonenumber = '" + phonenumber + "'";
                 System.out.println("Edit.java > QUERY: " + query);
-                try {
-                    response.sendRedirect(request.getHeader("Referer"));
-                    Connection connection = DriverManager.getConnection(url, username, password);
-                    Statement statement = connection.createStatement();
+                try(Connection connection = DriverManager.getConnection(url, username, password);
+                    Statement statement = connection.createStatement()) {
+                    response.sendRedirect(request.getHeader("Referer"));              
                     statement.executeUpdate(query);
-                    statement.executeUpdate(queryStatus);
+                    statement.executeUpdate(queryStatus);   
                 } catch (SQLException e) {
                     e.printStackTrace();
-                }                
+                }
                 break;
             
             case "Edit":
@@ -51,9 +51,16 @@ public class Edit extends AbstractServlet {
                 break;
             
             case "Editing":
-                query = "update candidates set surname = '" + request.getParameter("surname")
-                        + "', name = '" + request.getParameter("name")
-                        + "', patronymic = '" + request.getParameter("patronymic")
+                
+                String surname = request.getParameter("surname").replaceAll("[' \"]","");
+                String name = request.getParameter("name").replaceAll("[' \"]","");
+                String patronymic = request.getParameter("patronymic").replaceAll("[' \"]","");
+                String email = request.getParameter("email").replaceAll("[' \"]","");
+                                
+                query = "update candidates set surname = '" + surname
+                        + "', name = '" + name
+                        + "', patronymic = '" + patronymic
+                        + "', email = '" + email
                         + "', project = '" + request.getParameter("project")
                         + "', status = '" + request.getParameter("status")
                         + "', dates = '" + request.getParameter("dates")
@@ -107,15 +114,19 @@ public class Edit extends AbstractServlet {
                     request.getSession().setAttribute("branch", request.getParameter("branch"));
                 }
                 
-                try {
-                    redirect("/hr");
-                    Connection connection = DriverManager.getConnection(url, username, password);
-                    Statement statement = connection.createStatement();
-                    statement.executeUpdate(query);
-                    statement.executeUpdate(queryStatus);
-                } catch (IOException | SQLException e) {
-                    e.printStackTrace();
-                }                
+                try (Connection connection = DriverManager.getConnection(url, username, password);
+                     Statement statement = connection.createStatement()) {
+                    
+                    if ("".equals(surname) || "".equals(name) || "".equals(patronymic) || "".equals(email)) {
+                        forward("/isEmpty.html");
+                    } else {
+                        redirect("/hr");
+                        statement.executeUpdate(query);
+                        statement.executeUpdate(queryStatus);
+                    } 
+                } catch (SQLException e) {
+                    System.out.println("CRASHED! " + e.getLocalizedMessage());
+                }
                 break;
             
             default:

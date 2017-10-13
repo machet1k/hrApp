@@ -29,12 +29,12 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
         <script>
-            var СанктПетербург = Array('HeadHunter', 'SuperJob', 'Avito', 'Сайт Грузовичкоф', 'Сайт Таксовичкоф', 'Сайт БизнесФон', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят');
+            /* var СанктПетербург = Array('HeadHunter', 'SuperJob', 'Avito', 'Сайт Грузовичкоф', 'Сайт Таксовичкоф', 'Сайт БизнесФон', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят');
             var Димитровград = СанктПетербург.concat(Array('trisosny.ru', '25kanal.ru', 'dimitrovgradros.flagma.ru'));
             var Асбест = СанктПетербург.concat(Array('maxz.ru', 'asbest-gid.ru', 'asbest.name', 'asbet.ru', 'asbest-online.ru'));
             var Рефтинский = СанктПетербург.concat(Array('reftinskiy.ru', 'reftnews.ru'));
             var Челябинск = СанктПетербург.concat(Array('74.ru', 'chel.barahla.net', 'ubu.ru/chelyabinsk', 'chelyabinsk.gde.ru', 'chelyabinsk.dorus.ru', 'chelyabinsk.bestru.ru', 'chelyabinsk.sopta.ru'));
-            var ДО = СанктПетербург.concat(Array('HeadHunter', 'SuperJob', 'Avito', 'Сайт Грузовичкоф', 'Сайт Таксовичкоф', 'Сайт БизнесФон', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят'));
+            var ДО = СанктПетербург.concat(Array('HeadHunter', 'SuperJob', 'Avito', 'Сайт Грузовичкоф', 'Сайт Таксовичкоф', 'Сайт БизнесФон', 'Яндекс.Работа', 'Rabota.ru'));
 
             function showAdv(v) {
                 var mas = eval(v);
@@ -47,21 +47,20 @@
                     opt.innerHTML = mas[i];
                     el.appendChild(opt);
                 }
-            }
-
+            } */
 
             var requiredReason = "";
             var requiredNoteToStatus = "";
             
             function visible(v) {
-                if (v === "3) на обучении" || v === "5) на линии") {
+                if (v == "3) на обучении" || v == "5) на линии") {
                     $('#changedStatus').css('display', 'none');
                     $("#changedStatus").removeAttr('required');
                 } else {
                     $('#changedStatus').css('display', 'inline');
                     $("#changedStatus").attr('required', '');
                 }
-                if (v === "6) уволен" || v === "X) отказ" || v === "X) отказался" || v === "X) не выходит на связь") {
+                if (v == "6) уволен" || v == "X) отказ" || v == "X) отказался" || v == "X) не выходит на связь") {
                     $('#reason').css('display', 'inline');
                     $("#reason").attr('required', '');
                 } else {
@@ -75,7 +74,7 @@
 
     </head>
     <body onload="showAdv('СанктПетербург')">
-        <a href="http://biznesfon.ru"><img class="logimg" src="https://pp.userapi.com/c837636/v837636687/526af/LMmzKvJQDdM.jpg" alt="logotype"></a>
+        <a href="http://biznesfon.ru"><img class="logimg" src="https://s8.hostingkartinok.com/uploads/images/2017/10/96bfde63dbe76ee39596a1cbed77c3bb.png" alt="logotype"></a>
         <div class="containerEdit">
             <div class="headertext">Редактирование данных кандидата:</div>
             <div id="buffer"></div>
@@ -119,34 +118,122 @@
                         out.print("<input required class='gap-bottom' type='text' name='email' value='"
                                 + rs.getString(6) + "'aria-required='true'>");
 
-                        // Проект
-                        out.print("<select class='gap-bottom' name='project' required>"
-                                + "<option selected>" + rs.getString(8) + "</option>"
-                                + "<option>Грузовичкоф</option>"
-                                + "<option>Таксовичкоф</option>"
-                                + "<option>Достаевский</option>"
-                                + "<option>Кисточки</option></select>");
-                        // Регион
-                        out.print("<select class='gap-bottom' name='branch' required onchange='showAdv(this.value)'>"
+                        // Проект V
+                        out.print("<select class='gap-bottom' name='project' required>");
+                            
+                            String gf = "", tf = "", dst = "", kst = "";
+
+                            if ("Грузовичкоф".equals(rs.getString(8)))          { gf = "selected";}
+                            else if ("Таксовичкоф".equals(rs.getString(8)))     { tf = "selected";}
+                            else if ("Достаевский".equals(rs.getString(8)))     { dst = "selected";}
+                            else if ("Кисточки".equals(rs.getString(8)))        { kst = "selected";}
+
+                            out.print(
+                                "<option " +  gf + " >Грузовичкоф</option>"
+                              + "<option " +  tf + " >Таксовичкоф</option>"
+                              + "<option " + dst + " >Достаевский</option>"
+                              + "<option " + kst + " >Кисточки</option></select>");
+                        
+                        // Регион V
+                        out.print("<select class='gap-bottom' name='branch' required>"); /*onchange='showAdv(this.value)'*/    
+                        
+                                String spb = "", dmt = "", rft = "", asb = "", chl = "", dom = "";
                                 
-                                + "<option>" + rs.getString(9) + "</option>"
-                                + "<option value='СанктПетербург'>Санкт-Петербург</option>"
-                                + "<option value='Димитровград'>Димитровград</option>"
-                                + "<option value='Рефтинский'>Рефтинский</option>"
-                                + "<option value='Асбест'>Асбест</option>"
-                                + "<option value='Челябинск'>Челябинск</option>"
-                                + "<option value='ДО'>Домашний оператор</option></select>");
-                        // Канал связи
-                        out.print("<select class='gap-bottom' name='channel' required>"
-                                + "<option selected>" + rs.getString(12) + "</option>"
-                                + "<option title='Исходящий (отклик)'>Исх.отклик</option>"
-                                + "<option title='Исходящий (холодный звонок)'>Исх.хол.зв.</option>"
-                                + "<option title='Входящий'>Входящий</option></select>");
+                                if ("СанктПетербург".equals(rs.getString(9)))       { spb = "selected";}
+                                else if ("Димитровград".equals(rs.getString(9)))    { dmt = "selected";}
+                                else if ("Рефтинский".equals(rs.getString(9)))      { rft = "selected";}
+                                else if ("Асбест".equals(rs.getString(9)))          { asb = "selected";}
+                                else if ("Челябинск".equals(rs.getString(9)))       { chl = "selected";}
+                                else if ("ДО".equals(rs.getString(9)))              { dom = "selected";}
+                                
+                                out.print(
+                                    "<option " + spb + " value='СанктПетербург'>Санкт-Петербург</option>"
+                                  + "<option " + dmt + " >Димитровград</option>"
+                                  + "<option " + rft + " >Рефтинский</option>"
+                                  + "<option " + asb + " >Асбест</option>"
+                                  + "<option " + chl + " >Челябинск</option>"
+                                  + "<option " + dom + " value='ДО'>Домашний оператор</option></select>");
+                                
+                        // Канал связи V
+                        out.print("<select class='gap-bottom' name='channel' required>");
+                        
+                                String ot = "", hol = "", vh = "";
 
-                        // Рекламный источник
-                        out.print("<select class='gap-bottom' name='advertising' required id='adv'>"
-                                + "<option selected>" + rs.getString(13) + "</option></select>");
+                                if ("Исх.отклик".equals(rs.getString(12)))       {  ot = "selected";}
+                                else if ("Исх.хол.зв.".equals(rs.getString(12))) { hol = "selected";}
+                                else if ("Входящий".equals(rs.getString(12)))    {  vh = "selected";}
 
+                                out.print(
+                                    "<option " +  ot + " >Исх.отклик</option>"
+                                  + "<option " + hol + " >Исх.хол.зв.</option>"
+                                  + "<option " +  vh + " >Входящий</option></select>");
+
+                        // Рекламный источник                        
+                        out.print("<select class='gap-bottom' name='advertising' required>");
+             
+                        String[] adv = new String[27]; 
+                        String advertising = rs.getString(13);
+
+                        for (int i = 0; i < adv.length; i++) adv[i] = ""; 
+
+                        if      ("HeadHunter".equals(advertising))                  { adv[0]  = "selected";}
+                        else if ("SuperJob".equals(advertising))                    { adv[1]  = "selected";}
+                        else if ("Avito".equals(advertising))                       { adv[2]  = "selected";}
+                        else if ("gruzovichkof.ru".equals(advertising))             { adv[3]  = "selected";}
+                        else if ("taxovichkof.ru".equals(advertising))              { adv[4]  = "selected";}
+                        else if ("biznesfon.ru".equals(advertising))                { adv[5]  = "selected";}
+                        else if ("Яндекс.Работа".equals(advertising))               { adv[6]  = "selected";}
+                        else if ("Rabota.ru".equals(advertising))                   { adv[7]  = "selected";}
+                        else if ("Не помнят".equals(advertising))                   { adv[8]  = "selected";}
+                        else if ("Знакомые".equals(advertising))                    { adv[9]  = "selected";}
+                        else if ("trisosny.ru".equals(advertising))                 { adv[10] = "selected";}
+                        else if ("25kanal.ru".equals(advertising))                  { adv[11] = "selected";}
+                        else if ("dimitrovgradros.flagma.ru".equals(advertising))   { adv[12] = "selected";}
+                        else if ("maxz.ru".equals(advertising))                     { adv[13] = "selected";}
+                        else if ("asbest-gid.ru".equals(advertising))               { adv[14] = "selected";}
+                        else if ("asbest.name".equals(advertising))                 { adv[15] = "selected";}
+                        else if ("asbet.ru".equals(advertising))                    { adv[16] = "selected";}
+                        else if ("asbest-online.ru".equals(advertising))            { adv[17] = "selected";}
+                        else if ("reftinskiy.ru".equals(advertising))               { adv[18] = "selected";}
+                        else if ("reftnews.ru".equals(advertising))                 { adv[19] = "selected";}
+                        else if ("74.ru".equals(advertising))                       { adv[20] = "selected";}
+                        else if ("chel.barahla.net".equals(advertising))            { adv[21] = "selected";}
+                        else if ("ubu.ru/chelyabinsk".equals(advertising))          { adv[22] = "selected";}
+                        else if ("chelyabinsk.gde.ru".equals(advertising))          { adv[23] = "selected";}
+                        else if ("chelyabinsk.dorus.ru".equals(advertising))        { adv[24] = "selected";}
+                        else if ("chelyabinsk.bestru.ru".equals(advertising))       { adv[25] = "selected";}
+                        else if ("chelyabinsk.sopta.ru".equals(advertising))        { adv[26] = "selected";}
+
+                        out.print(
+                          "<option " + adv[0] + "  value='HeadHunter'>HeadHunter</option>"
+                        + "<option " + adv[1] + "  value='SuperJob'>SuperJob</option>"
+                        + "<option " + adv[2] + "  value='Avito'>Avito</option>"
+                        + "<option " + adv[3] + "  value='gruzovichkof.ru'>gruzovichkof.ru</option>"
+                        + "<option " + adv[4] + "  value='taxovichkof.ru'>taxovichkof.ru</option>"
+                        + "<option " + adv[5] + "  value='biznesfon.ru'>biznesfon.ru</option>"
+                        + "<option " + adv[6] + "  value='Яндекс.Работа'>Яндекс.Работа</option>"
+                        + "<option " + adv[7] + "  value='Rabota.ru'>Rabota.ru</option>"
+                        + "<option " + adv[8] + "  value='Не помнят'>Не помнят</option>"
+                        + "<option " + adv[9] + " value='Знакомые'>Знакомые</option>"
+                        + "<option " + adv[10] + " value='trisosny.ru'>trisosny.ru</option>"
+                        + "<option " + adv[11] + " value='25kanal.ru'>25kanal.ru</option>"
+                        + "<option " + adv[12] + " value='dimitrovgradros.flagma.ru'>dimitrovgradros.flagma.ru</option>"
+                        + "<option " + adv[13] + " value='maxz.ru'>maxz.ru</option>"
+                        + "<option " + adv[14] + " value='asbest-gid.ru'>asbest-gid.ru</option>"
+                        + "<option " + adv[15] + " value='asbest.name'>asbest.name</option>"
+                        + "<option " + adv[16] + " value='asbet.ru'>asbet.ru</option>"
+                        + "<option " + adv[17] + " value='asbest-online.ru'>asbest-online.ru</option>"
+                        + "<option " + adv[18] + " value='reftinskiy.ru'>reftinskiy.ru</option>"
+                        + "<option " + adv[19] + " value='reftnews.ru'>reftnews.ru</option>"
+                        + "<option " + adv[20] + " value='74.ru'>74.ru</option>"
+                        + "<option " + adv[21] + " value='chel.barahla.net'>chel.barahla.net</option>"
+                        + "<option " + adv[22] + " value='ubu.ru/chelyabinsk'>ubu.ru/chelyabinsk</option>"
+                        + "<option " + adv[23] + " value='chelyabinsk.gde.ru'>chelyabinsk.gde.ru</option>"
+                        + "<option " + adv[24] + " value='chelyabinsk.dorus.ru'>chelyabinsk.dorus.ru</option>"
+                        + "<option " + adv[25] + " value='chelyabinsk.bestru.ru'>chelyabinsk.bestru.ru</option>"
+                        + "<option " + adv[26] + " value='chelyabinsk.sopta.ru'>chelyabinsk.sopta.ru</option></select>");
+
+                        
                         // Дата
                         out.print("<select class='gap-bottom' name='dates' required>");
 
@@ -216,19 +303,35 @@
                         }
                         out.print("</select>");
 
-                        // Статус
-                        out.print("<hr>Изменение статуса<hr>");
-                        out.print("<select class='gap-bottom' name='status' onchange='visible(this.value)'>"
-                                + "<option style='background-color: #000;' selected>" + rs.getString(7) + "</option>"
-                                + "<option style='background-color: #ffffaa;'>1) пригл. на собесед.</option>"
-                                + "<option style='background-color: #ffffaa;'>2) пригл. на обучение</option>"
-                                + "<option style='background-color: #aaffaa;'>3) на обучении</option>"
-                                + "<option style='background-color: #ffffaa;'>4) выход на линию</option>"
-                                + "<option style='background-color: #aaffaa;'>5) на линии</option>"
-                                + "<option style='background-color: #ffaaaa;'>6) уволен</option>"
-                                + "<option style='background-color: #ffaaaa;'>X) отказ</option>"
-                                + "<option style='background-color: #ffaaaa;'>X) отказался</option>"
-                                + "<option style='background-color: #ffaaaa;'>X) не выходит на связь</option></select>");
+                        // Статус    
+                        out.print("<hr>Изменение статуса<hr>");                   
+                        out.print("<select class='gap-bottom' name='status' onchange='visible(this.value)'>");
+             
+                        String[] statuses = new String[9]; 
+                        String status = rs.getString(7);
+
+                        for (int i = 0; i < statuses.length; i++) statuses[i] = ""; 
+
+                        if      ("1) пригл. на собесед.".equals(status))    { statuses[0]  = "selected";}
+                        else if ("2) пригл. на обучение".equals(status))    { statuses[1]  = "selected";}
+                        else if ("3) на обучении".equals(status))           { statuses[2]  = "selected";}
+                        else if ("4) выход на линию".equals(status))        { statuses[3]  = "selected";}
+                        else if ("5) на линии".equals(status))              { statuses[4]  = "selected";}
+                        else if ("6) уволен".equals(status))                { statuses[5]  = "selected";}
+                        else if ("X) отказ".equals(status))                 { statuses[6]  = "selected";}
+                        else if ("X) отказался".equals(status))             { statuses[7]  = "selected";}
+                        else if ("X) не выходит на связь".equals(status))   { statuses[8]  = "selected";}
+                        
+                        out.print(
+                          "<option style='background-color: #ffffaa;'" + statuses[0] + ">1) пригл. на собесед.</option>"
+                        + "<option style='background-color: #ffffaa;'" + statuses[1] + ">2) пригл. на обучение</option>"
+                        + "<option style='background-color: #aaffaa;'" + statuses[2] + ">3) на обучении</option>"
+                        + "<option style='background-color: #ffffaa;'" + statuses[3] + ">4) выход на линию</option>"
+                        + "<option style='background-color: #aaffaa;'" + statuses[4] + ">5) на линии</option>"
+                        + "<option style='background-color: #ffaaaa;'" + statuses[5] + ">6) уволен</option>"
+                        + "<option style='background-color: #ffaaaa;'" + statuses[6] + ">X) отказ</option>"
+                        + "<option style='background-color: #ffaaaa;'" + statuses[7] + ">X) отказался</option>"
+                        + "<option style='background-color: #ffaaaa;'" + statuses[8] + ">X) не выходит на связь</option></select>");
 
                         out.print("<input type='date' id='changedStatus' name='changedStatus'>");
 
@@ -273,6 +376,12 @@
                         displayDate = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
                         out.print("<span>" + displayDate + "</span><span>" + rs.getString(1) + "</span><br>");
                     }
+                    connection.close();
+                    connection = null;
+                    statement.close();
+                    statement = null;
+                    rs.close();
+                    rs = null;
                 %> 
             </div>
         </div>

@@ -32,6 +32,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/defaults-*.min.js"></script>
 
         <link rel="icon" type="image/x-icon" href="http://savepic.ru/14659608.png"/>
+        <link href="css/style.css" type="text/css" rel="stylesheet">
+        
         <%
             String url = "jdbc:derby://localhost:1527/hrdb";
             String username = "root";
@@ -62,21 +64,20 @@
                 branch = String.valueOf(session.getAttribute("branch"));
             }
         %>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
 
     </head>
 
     <body>
 
         <a href="/hr/sign-out" class="pull-right btn btn-link">Выход [<% out.print(session.getAttribute("role")); %>]</a>
-        <a target="_blank" rel="nofollow noopener" href="http://biznesfon.ru"><img class="logimg" src="https://pp.userapi.com/c837636/v837636687/526af/LMmzKvJQDdM.jpg" alt="logotype"></a>
+        <a target="_blank" rel="nofollow noopener" href="http://biznesfon.ru"><img class="logimg" src="https://s8.hostingkartinok.com/uploads/images/2017/10/96bfde63dbe76ee39596a1cbed77c3bb.png" alt="logotype"></a>
 
         <div class="containerIndex">
             <div class="row">
                 <form action="Search" method="Post">
                     <div class="pull-right"> 
                         <input required class="phonenumber" type="text" name="phonenumber" placeholder="9115557799" pattern="[9]{1}[0-9]{9}">
-                        <button class="pull-right btn btn-link searchbtn" type="submit" name="action" value="SetBranch" ><!--&#128269;-->Поиск</button>
+                        <button class="pull-right btn btn-link searchbtn" type="submit" name="action" value="SetBranch" >Поиск</button>
                     </div>
                 </form>
 
@@ -84,15 +85,29 @@
                     <div class="align_right">
 
                         <button type="submit" name="action" value="SetBranch" class="pull-right btn btn-link choose">Выбрать</button>
-                        <% out.print("<select data-width='175px' class='gap-bottom branch selectpicker show-tick' name='branch' required>"
-                                    + "<option selected>" + branch + "</option>"
-                                    + "<option value='СанктПетербург'>Санкт-Петербург</option>"
-                                    + "<option>Димитровград</option>"
-                                    + "<option>Рефтинский</option>"
-                                    + "<option>Асбест</option>"
-                                    + "<option>Челябинск</option>"
-                                    + "<option value='ДО'>Домашний Оператор</option></select>");
-                        %>
+                        <select data-width='175px' class='gap-bottom branch selectpicker show-tick' name='branch' required>
+                            <%
+                                String spb = "", dmt = "", rft = "", asb = "", chl = "", dom = "";
+
+                                if ("СанктПетербург".equals(session.getAttribute("branch")))       { spb = "selected";}
+                                else if ("Димитровград".equals(session.getAttribute("branch")))    { dmt = "selected";}
+                                else if ("Рефтинский".equals(session.getAttribute("branch")))      { rft = "selected";}
+                                else if ("Асбест".equals(session.getAttribute("branch")))          { asb = "selected";}
+                                else if ("Челябинск".equals(session.getAttribute("branch")))       { chl = "selected";}
+                                else if ("ДО".equals(session.getAttribute("branch")))              { dom = "selected";}
+
+                                out.print(
+                                    "<option " + spb + " value='СанктПетербург'>Санкт-Петербург</option>"
+                                  + "<option " + dmt + " >Димитровград</option>"
+                                  + "<option " + rft + " >Рефтинский</option>"
+                                  + "<option " + asb + " >Асбест</option>"
+                                  + "<option " + chl + " >Челябинск</option>"
+                                  + "<option " + dom + " value='ДО'>Домашний оператор</option>");
+
+                            %>
+                        </select>
+                        
+                        
                     </div>
                     <h3><span>Human Resourse App:</span> Набор персонала БизнесФон.</h3>
 
@@ -276,6 +291,14 @@
                                     request.getSession().setAttribute("dateSearch", null);
                                     request.getSession().setAttribute("timeSearch", null);
                                     request.getSession().setAttribute("branchSearch", null);
+                                    
+                                    connection.close();
+                                    connection = null;
+                                    statement.close();
+                                    statement = null;
+                                    rs.close();
+                                    rs = null;                                    
+
                                 %>
                                 <hr>
                             </div>
@@ -342,7 +365,7 @@
                             </select></div>
 
                         <div><select class="gap-bottom" name="advertising">
-                                <option selected disabled value=''>Рекламный источник</option>
+                                https://s8.hostingkartinok.com/uploads/images/2017/10/96bfde63dbe76ee39596a1cbed77c3bb.png
                                 <option>HeadHunter</option>
                                 <option>SuperJob</option>
                                 <option>Avito</option>
@@ -379,7 +402,7 @@
                     </div> 
                 </form>
                 <div class="sign"> 
-                    &copy; This application has been created by Roman Kharitonov. All rights reserved.
+                    &copy; This application has been developed by Roman Kharitonov. All rights reserved.
                 </div> 
             </div>                                
         </div> 

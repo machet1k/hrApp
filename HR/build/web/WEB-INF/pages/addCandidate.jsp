@@ -44,7 +44,7 @@
     </head>
     <body onload="showAdv('СанктПетербург')">
         
-        <a href="http://biznesfon.ru"><img class="logimg" src="https://pp.userapi.com/c837636/v837636687/526af/LMmzKvJQDdM.jpg" alt="logotype"></a>
+        <a href="http://biznesfon.ru"><img class="logimg" src="https://s8.hostingkartinok.com/uploads/images/2017/10/96bfde63dbe76ee39596a1cbed77c3bb.png" alt="logotype"></a>
         <div class="animated fadeInDownBig">
             <div class="headertext">
                 <%
@@ -88,19 +88,6 @@
                     <select class="gap-bottom" name="advertising" required id="adv">
                         <option selected disabled value=''>Рекламный источник</option>
                     </select> 
-
-                    <!--hr>Занесение статуса<hr>
-                    <select class="gap-bottom" name="status">
-                        <option selected style='background-color: #aaffaa;'>1) пригл. на собесед.</option>
-                        <option style='background-color: #aaffaa;'>2) пригл. на обучение</option>
-                        <option style='background-color: #ffffaa;'>3) на обучении</option>
-                        <option style='background-color: #aaffaa;'>4) выход на линию</option>
-                        <option style='background-color: #ffffaa;'>5) на линии</option>
-                        <option style='background-color: #ffaaaa;'>6) уволен</option>
-                        <option style='background-color: #ffaaaa;'>X) отказ</option>
-                        <option style='background-color: #ffaaaa;'>X) отказался</option>
-                        <option style='background-color: #ffaaaa;'>X) не выходит на связь</option>
-                    </select-->
 
                     <button class="pull-left btn-success">Добавить</button>
                 </form>    

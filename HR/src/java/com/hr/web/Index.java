@@ -18,8 +18,8 @@ public class Index extends AbstractServlet {
         if (!isUserAuthenticated()) redirect("/hr/sign-in");
         else {
             getResponse().setHeader("Cache-Control", "no-cache");
-            if (getSession().getAttribute("role").equals("HR")) forward("/indexHR.jsp");
-            if (getSession().getAttribute("role").equals("PO")) forward("/index.jsp");
+            if (getSession().getAttribute("role").equals("user")) forward("/index-lim.jsp");
+            if (getSession().getAttribute("role").equals("manager")) forward("/index.jsp");
         }
     }
 }

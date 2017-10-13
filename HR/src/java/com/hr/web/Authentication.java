@@ -23,8 +23,8 @@ public class Authentication extends AbstractServlet {
     private static final String HR = "HR";
     private static final String PASS_HR = "biznesfon";
 
-    private static final String PO = "PO";
-    private static final String PASS_PO = "biznesfon";
+    private static final String MANAGER = "manager";
+    private static final String PASS_MANAGER = "biznesfon";
 
     @Override
     protected void doGet(String address) throws ServletException, IOException {
@@ -89,7 +89,7 @@ public class Authentication extends AbstractServlet {
 
         Credentials credentials = new Credentials(request);
         if (credentials.equals(new Credentials(HR, PASS_HR))
-         || credentials.equals(new Credentials(PO, PASS_PO))) {
+         || credentials.equals(new Credentials(MANAGER, PASS_MANAGER))) {
             session.setAttribute("role", credentials.getLogin());
             session.setAttribute("isAuth", true);
             redirect("/hr");
@@ -99,37 +99,35 @@ public class Authentication extends AbstractServlet {
         }
     }
 
-    private void addCand(HttpServletRequest request) {
+    private void addCand(HttpServletRequest request) throws ServletException {
         String url = "jdbc:derby://localhost:1527/hrdb";
         String username = "root";
         String password = "bcenter";
-
-        
         
         String query4help = "SELECT * FROM candidates WHERE phonenumber = '" + request.getParameter("phonenumber") + "'";
         System.out.println("\nAutentication > QUERY: " + query4help);
         
-        try {
-            Connection connection = DriverManager.getConnection(url, username, password);
+        try(Connection connection = DriverManager.getConnection(url, username, password);
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query4help);
+            ResultSet rs = statement.executeQuery(query4help)){
             if (rs.next()) {
                 request.getSession().setAttribute("isExist", "true");
                 forward("/isExist.html");
                 return;
             }
         } catch (IOException | ServletException | SQLException e) { e.printStackTrace(); }
-        
-        
-        
-        
+
+        String surname = request.getParameter("surname").replaceAll("[' \"]","");
+        String name = request.getParameter("name").replaceAll("[' \"]","");
+        String patronymic = request.getParameter("patronymic").replaceAll("[' \"]","");
+        String email = request.getParameter("email").replaceAll("[' \"]","");
         
         String query = "insert into candidates(surname, name, patronymic, phonenumber, email, status, project, branch, dates, times, channel, advertising, manager) values('"
-                + request.getParameter("surname")
-                + "','" + request.getParameter("name")
-                + "','" + request.getParameter("patronymic")
+                + surname
+                + "','" + name
+                + "','" + patronymic
                 + "','" + request.getParameter("phonenumber")
-                + "','" + request.getParameter("email")
+                + "','" + email
                 + "','" + /*request.getParameter("status")*/ "1) пригл. на собесед."
                 + "','" + request.getParameter("project")
                 + "','" + request.getParameter("branch")
@@ -138,7 +136,7 @@ public class Authentication extends AbstractServlet {
                 + "','" + request.getParameter("channel")
                 + "','" + request.getParameter("advertising")
                 + "','" + request.getSession().getAttribute("role") + "')";
-
+        
         SENDER.send(
                 "Приглашение на вебинар \"БизнесФон\"\n\n", "Добрый день, "
                 + request.getParameter("name")
@@ -152,17 +150,22 @@ public class Authentication extends AbstractServlet {
 
         String queryStatus = "insert into statuses(phonenumber, status, dates, reason) values('"
                 + request.getParameter("phonenumber") + "','"
-                + /*request.getParameter("status")*/ "1) пригл. на собесед." + "','"
-                + request.getSession().getAttribute("dates") + "', '–')";
+                + /*request.getParameter("status")*/ "1) пригл. на собесед.','"
+                + request.getSession().getAttribute("dates") + "','-')";
         System.out.println(queryStatus);
 
-        try {
-            redirect("/hr");
-            Connection connection = DriverManager.getConnection(url, username, password);
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(query);
-            statement.executeUpdate(queryStatus);
-            System.out.println(query);
+        
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+            Statement statement = connection.createStatement()){
+            
+            if ("".equals(surname) || "".equals(name) || "".equals(patronymic) || "".equals(email)) {
+                forward("/isEmpty.html");
+            } else {
+                statement.executeUpdate(query);
+                statement.executeUpdate(queryStatus);
+                redirect("/hr");
+                System.out.println(query);
+            }
         } catch (IOException | SQLException e) {
             System.out.println("CRASHED! " + e.getLocalizedMessage());
         }

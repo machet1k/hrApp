@@ -32,6 +32,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/defaults-*.min.js"></script>
 
         <link rel="icon" type="image/x-icon" href="http://savepic.ru/14659608.png"/>
+        <link href="css/style.css" type="text/css" rel="stylesheet">
+        
         <%
             String url = "jdbc:derby://localhost:1527/hrdb";
             String username = "root";
@@ -62,21 +64,20 @@
                 branch = String.valueOf(session.getAttribute("branch"));
             }
         %>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
 
     </head>
 
     <body>
 
         <a href="/hr/sign-out" class="pull-right btn btn-link">Выход [<% out.print(session.getAttribute("role")); %>]</a>
-        <a target="_blank" rel="nofollow noopener" href="http://biznesfon.ru"><img class="logimg" src="https://pp.userapi.com/c837636/v837636687/526af/LMmzKvJQDdM.jpg" alt="logotype"></a>
+        <a target="_blank" rel="nofollow noopener" href="http://biznesfon.ru"><img class="logimg" src="https://s8.hostingkartinok.com/uploads/images/2017/10/96bfde63dbe76ee39596a1cbed77c3bb.png" alt="logotype"></a>
 
         <div class="containerIndex">
             <div class="row">
                 <form action="Search" method="Post">
                     <div class="pull-right"> 
                         <input required class="phonenumber" type="text" name="phonenumber" placeholder="9115557799" pattern="[9]{1}[0-9]{9}">
-                        <button class="pull-right btn btn-link searchbtn" type="submit" name="action" value="SetBranch" >Поиск</button>
+                        <button class="pull-right btn btn-link searchbtn" type="submit" name="action" value="SetBranch" ><!--&#128269;-->Поиск</button>
                     </div>
                 </form>
 
@@ -121,8 +122,7 @@
                                         if (day < 10) prepareDay = ("0" + day);
                                         else prepareDay = "" + day;
 
-                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay
-                                                + "' and branch = '" + branch + "' and status = 'собеседование'";
+                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
                                         System.out.println("currentMonth -->: " + query);
                                         rs = statement.executeQuery(query);
                                         rs.next();
@@ -146,8 +146,7 @@
                                         if (day < 10) prepareDay = ("0" + day);
                                         else prepareDay = "" + day;
 
-                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay 
-                                                + "' and branch = '" + branch + "' and status = 'собеседование'";
+                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
                                         System.out.println("nextMonth -->: " + query);
                                         rs = statement.executeQuery(query);
                                         rs.next();
@@ -196,9 +195,10 @@
                                                 minutesTo = ":00";
                                                 hoursTo = hoursFrom + 1;
                                             }
-                                            query = "SELECT count(*) FROM candidates where dates = '" + dates
-                                                    + "' and times = '" + hoursFrom + minutesFrom
-                                                    + "' and branch = '" + branch + "' and status = 'собеседование'";
+                                            query = "SELECT count(*) FROM candidates where dates = '" 
+                                                    + dates + "' and times = '" 
+                                                    + hoursFrom + minutesFrom + "' and branch = '" 
+                                                    + branch + "' and status = '1) пригл. на собесед.'";
                                             rs = statement.executeQuery(query);
                                             rs.next();
                                             if ((hoursFrom + minutesFrom).equals(times) || (hoursFrom + minutesFrom + ":00").equals(times)) {
@@ -242,13 +242,14 @@
                                     <div class="wider">e-mail</div>
                                     <div class="normal">Проект</div>
                                     <div class="wider">Статус</div>
+                                    <!--div class="narrower">Action</div-->
                                     <!--div class="normal">Менеджер</div-->
                                 </div>
                                 <hr>
                                 <%
                                     query = "SELECT * FROM candidates where dates = '" + dates
                                             + "' and times = '" + times
-                                            + "' and branch = '" + branch + "' and status = 'собеседование'";
+                                            + "' and branch = '" + branch + "'";
                                     System.out.println("index > QUERY: " + query);
                                     connection = DriverManager.getConnection(url, username, password);
                                     statement = connection.createStatement();
@@ -269,21 +270,29 @@
                                                 + "<div class='wider' title='" + rs.getString(6) + "'>" + shortEmail + "</div>"
                                                 + "<div class='normal'>" + rs.getString(8) + "</div>"
                                                 /*+ "<div class='normal'>" + rs.getString(15) + "</div>"*/
-                                                + "<div class='wider'>" + rs.getString(7) + "</div></div></label>");
+                                                + "<div class='wider'>" + rs.getString(7) + "</div>"
+                                                /*+ "<div class='narrower'><button class='btn btn-warning btn-xs' type='button'>Ред.</button></div>"*/
+                                                + "</div></label>");
                                     }
                                     request.getSession().setAttribute("search", "false");
                                     request.getSession().setAttribute("dateSearch", null);
                                     request.getSession().setAttribute("timeSearch", null);
                                     request.getSession().setAttribute("branchSearch", null);
+                                    
+                                    connection.close();
+                                    connection = null;
+                                    statement.close();
+                                    statement = null;
+                                    rs.close();
+                                    rs = null; 
                                 %>
                                 <hr>
                             </div>
                         </div>
                     </div>
                 </form>
-
                 <div class="sign"> 
-                    &copy; This application has been created by Roman Kharitonov. All rights reserved.
+                    &copy; This application has been developed by Roman Kharitonov. All rights reserved.
                 </div> 
             </div>                                
         </div> 

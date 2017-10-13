@@ -1,4 +1,4 @@
-body {
+html, body {
     font-family: monospace;
     background: #fafafa;
 }
@@ -80,14 +80,14 @@ align_left {
 
 .stroke .wider {
     float: left; 
-    width: 175px; 
+    width: 200px; 
     height: 25px;
     
 }
 
 .stroke .verywider {
     float: left; 
-    width: 220px; 
+    width: 230px; 
     height: 25px;
     
 }
@@ -139,7 +139,7 @@ hr {
 }
 
 .containerIndex .panel-body {
-    height: 720px;
+    height: 670px;
     overflow: auto;
     /*background-color: rgba(255, 255, 255, 0.5);
 */}
@@ -151,7 +151,7 @@ hr {
 }
 
 #candidates {
-    width: 900px;
+    width: 940px;
     float: left;
     padding: 7px;
 }
@@ -176,15 +176,14 @@ body {
     background-position:top center;
     background-attachment:fixed;
     background-repeat:no-repeat;
-    overflow: hidden;
 }
 
 .logimg {
     position: absolute;
     width: 200px;
-    top: 840px;
+    top: 820px;
     left: 1700px;
-    opacity: 0.4;
+    opacity: 0.4;                      
 }
 
 .logimg:hover {
@@ -199,11 +198,11 @@ body {
 .sign {
     margin: 0 auto;
     text-align: center;
-    color: #fff;
-    margin: 15px 0 0 0;
+    color: #fafafa;
+    margin: 5px 0 0 0;
 }
 .sign:hover {
-    color: #ffdbb3;
+    color: #337ab7;/*#ffdbb3;*/
     cursor: pointer;
 }
 
@@ -245,6 +244,7 @@ body {
 
 td tr {
     text-align: center;
+    height: 30px;
 }
 
 #reason, #noteToStatus {

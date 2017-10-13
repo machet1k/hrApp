@@ -25,10 +25,9 @@ public class Search extends AbstractServlet {
         String query = "SELECT * FROM candidates WHERE phonenumber = '" + request.getParameter("phonenumber") + "'";
         System.out.println("\nSearch > QUERY: " + query);
         
-        try {
-            Connection connection = DriverManager.getConnection(url, username, password);
+        try(Connection connection = DriverManager.getConnection(url, username, password);
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery(query)) {
             request.getSession().setAttribute("search", "true");
             if (rs.next()) {
                 request.getSession().setAttribute("branchSearch", rs.getString(9));

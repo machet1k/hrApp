@@ -30,6 +30,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/defaults-*.min.js"></script>
         <link rel="icon" type="image/x-icon" href="http://savepic.ru/14659608.png"/>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+    <body>
         <%
             // параметры для подключения к базе данных hrdb
             String url = "jdbc:derby://localhost:1527/hrdb";
@@ -37,25 +40,25 @@
             String password = "bcenter";
             // получение соединения с БД, расположенной по url, используя username/password     
             Connection connection = DriverManager.getConnection(url, username, password);
+            
             Statement statement = connection.createStatement();
             Statement statement4help = connection.createStatement();
+            
             String query = String.valueOf(request.getSession().getAttribute("query"));
+            
             ResultSet rs = statement.executeQuery(query);
             ResultSet rs4help = statement4help.executeQuery(query);
+            
             System.out.println("downloading > QUERY: " + query);
         %>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-    </head>
-    <body>
-        <a href="http://biznesfon.ru"><img class="logimg" src="https://pp.userapi.com/c837636/v837636687/526af/LMmzKvJQDdM.jpg" alt="logotype"></a>
+        <a href="http://biznesfon.ru"><img class="logimg" src="https://s8.hostingkartinok.com/uploads/images/2017/10/96bfde63dbe76ee39596a1cbed77c3bb.png" alt="logotype"></a>
         <div class="containerDownload">
             <div class="row">
                 <div class="panel panel-default">
                     <div id="download">
                         <form action="Download" method="Get">
-
-                            <div> </div>
-                            <div>
+                            <div>&ensp;</div>
+                            <div> 
                                 <select class='gap-bottom' name='branch'>
                                     <%
                                         String spb = "", dmt = "", rft = "", asb = "", chl = "", dom = "", null_branch = "";
@@ -272,84 +275,92 @@
                                 <td>Дата обучения</td>            
                                 <td>Дата выхода на линию</td>                        
                                 <td>Дата отказа/увольнения</td-->   
-                                <!--td>Причина</td-->
+                                <!--td>Причина</td-->   
                                 <td></td>
+                                <td>История</td>
+                                <td>изменения</td>
+                                <td>статусов</td>
+                                <td>с&nbsp;причиной</td>
+                                <td>завершения</td>
+                                <td>деятельности</td>
+                                <td>в&nbsp;компании</td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                
+                                
+                                
 
                             </tr>
                             <%
-                                rs4help.next();
-                                rs.next();
+                                if (rs4help.next() && rs.next()) {
                                 
-                                String displayDate1 = LocalDate.parse(rs.getString(17), DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
-                                out.print("<tr>"
-                                    + "<td>" + rs.getString(2) + "</td>"
-                                    + "<td>" + rs.getString(3) + "</td>"
-                                    + "<td>" + rs.getString(4) + "</td>"
-                                    + "<td>" + rs.getString(5) + "</td>"
-                                    + "<td>" + rs.getString(6) + "</td>"
-                                    + "<td>" + rs.getString(7) + "</td>"
-                                    + "<td>" + rs.getString(8) + "</td>"
-                                    + "<td>" + rs.getString(9) + "</td>"
-                                    //+ "<td>" + rs.getString(10) + "</td>"
-                                    //+ "<td>" + rs.getString(11) + "</td>"
-                                    + "<td>" + rs.getString(12) + "</td>"
-                                    + "<td>" + rs.getString(13) + "</td>"
-                                    //+ "<td>" + rs.getString(14) + "</td>"
-                                    + "<td>" + rs.getString(15) + "</td>"
-                                    //+ "<td>" + rs.getString(18) + "</td>"
-                                    + "<td>" + rs.getString(16) + "</td>"
-                                    + "<td>" + displayDate1 + "</td>");
-                                
-                                
-                                while (rs.next()) {
-                                    // если в текущей и след.строчке разные номера тел., то сливаем даты статусов в одну запись
-                                    if (!rs.getString(5).equals(rs4help.getString(5))) { 
-                                        String displayDate = LocalDate.parse(rs.getString(17), DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
-                                        out.print("</tr><tr>"
-                                            + "<td>" + rs.getString(2) + "</td>" // Ф
-                                            + "<td>" + rs.getString(3) + "</td>" // И
-                                            + "<td>" + rs.getString(4) + "</td>" // О
-                                            + "<td>" + rs.getString(5) + "</td>" // тел.
-                                            + "<td>" + rs.getString(6) + "</td>" // почта
-                                            + "<td>" + rs.getString(7) + "</td>" // статус
-                                            + "<td>" + rs.getString(8) + "</td>" // проект
-                                            + "<td>" + rs.getString(9) + "</td>" // регион
-                                            //+ "<td>" + rs.getString(10) + "</td>"
-                                            //+ "<td>" + rs.getString(11) + "</td>"
-                                            + "<td>" + rs.getString(12) + "</td>" // канал
-                                            + "<td>" + rs.getString(13) + "</td>" // рекл.ист.
-                                            //+ "<td>" + rs.getString(14) + "</td>"
-                                            + "<td>" + rs.getString(15) + "</td>" // менеджер
-                                            + "<td>" + rs.getString(16) + "</td>"
-                                            + "<td>" + displayDate + "</td>"); // этап 1
-                                    } else {
-                                        String displayDate = LocalDate.parse(rs.getString(17), DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
-                                        out.print("<td>" + rs.getString(16) + "</td>");
-                                        out.print("<td>" + displayDate + "</td>"); // этап 2-6
-                                        if (rs.getString(16).equals("6) уволен") ||
+                                    String displayDate1 = LocalDate.parse(rs.getString(17), DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
+                                    out.print("<tr>"
+                                        + "<td>" + rs.getString(2) + "</td>"
+                                        + "<td>" + rs.getString(3) + "</td>"
+                                        + "<td>" + rs.getString(4) + "</td>"
+                                        + "<td>" + rs.getString(5) + "</td>"
+                                        + "<td>" + rs.getString(6) + "</td>"
+                                        + "<td>" + rs.getString(7) + "</td>"
+                                        + "<td>" + rs.getString(8) + "</td>"
+                                        + "<td>" + rs.getString(9) + "</td>"
+                                        //+ "<td>" + rs.getString(10) + "</td>"
+                                        //+ "<td>" + rs.getString(11) + "</td>"
+                                        + "<td>" + rs.getString(12) + "</td>"
+                                        + "<td>" + rs.getString(13) + "</td>"
+                                        //+ "<td>" + rs.getString(14) + "</td>"
+                                        + "<td>" + rs.getString(15) + "</td>"
+                                        + "<td>" + rs.getString(16) + "</td>"
+                                        + "<td>" + displayDate1 + "</td>");
+
+
+                                    while (rs.next()) {
+                                        // если в текущей и след.строчке разные номера тел., то сливаем даты статусов в одну запись
+                                        if (!rs.getString(5).equals(rs4help.getString(5))) { 
+                                            String displayDate = LocalDate.parse(rs.getString(17), DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
+                                            out.print("</tr><tr>"
+                                                + "<td>" + rs.getString(2) + "</td>" // Ф
+                                                + "<td>" + rs.getString(3) + "</td>" // И
+                                                + "<td>" + rs.getString(4) + "</td>" // О
+                                                + "<td>" + rs.getString(5) + "</td>" // тел.
+                                                + "<td>" + rs.getString(6) + "</td>" // почта
+                                                + "<td>" + rs.getString(7) + "</td>" // статус
+                                                + "<td>" + rs.getString(8) + "</td>" // проект
+                                                + "<td>" + rs.getString(9) + "</td>" // регион
+                                                //+ "<td>" + rs.getString(10) + "</td>"
+                                                //+ "<td>" + rs.getString(11) + "</td>"
+                                                + "<td>" + rs.getString(12) + "</td>" // канал
+                                                + "<td>" + rs.getString(13) + "</td>" // рекл.ист.
+                                                //+ "<td>" + rs.getString(14) + "</td>"
+                                                + "<td>" + rs.getString(15) + "</td>" // менеджер
+                                                + "<td>" + rs.getString(16) + "</td>"
+                                                + "<td>" + displayDate + "</td>"); // этап 1
+                                        } else {
+                                            String displayDate = LocalDate.parse(rs.getString(17), DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
+                                            out.print("<td>" + rs.getString(16) + "</td>");
+                                            out.print("<td>" + displayDate + "</td>"); // этап 2-6
+                                            if (rs.getString(16).equals("6) уволен") ||
                                                 rs.getString(16).equals("X) отказ") ||
                                                 rs.getString(16).equals("X) отказался") ||
                                                 rs.getString(16).equals("X) не выходит на связь")) out.print("<td>" + rs.getString(18) + "</td>");
-                                        
+                                        }
+                                        rs4help.next();   
                                     }
-                                    
-                                    rs4help.next();   
                                 }
                                 
-                                out.print("<tr>");
+                          
+                    connection.close();
+                    connection = null;
+                    statement.close();
+                    statement = null;
+                    rs4help.close();
+                    rs4help = null;
+                    rs.close();
+                    rs = null;
                             %>
                         </table>
                     </div>
                     <!--div class="sign"> 
-                        &copy; This application has been created by Roman Kharitonov. All rights reserved.
+                        &copy; This application has been developed by Roman Kharitonov. All rights reserved.
                     </div--> 
                 </div> 
             </div>
