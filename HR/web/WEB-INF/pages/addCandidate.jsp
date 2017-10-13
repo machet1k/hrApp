@@ -1,3 +1,7 @@
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.time.LocalDate"%>
+<%@page import="java.util.Locale"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,15 +12,20 @@
         <link href="css/groundwork.css" type="text/css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <link rel="icon" type="image/x-icon" href="http://savepic.ru/14659608.png"/>
+        <!--script src="../../js/jquery-3.2.1.js"></script>
+        <script src="../../js/jquery-maskedinput.js"></script>
+        
+        <script src="http://base.4cars.pro/jquery.maskedinput.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script-->
 
         <script>
-            var СанктПетербург = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят');
-            var Димитровград = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','trisosny.ru','25kanal.ru','dimitrovgradros.flagma.ru');
-            var Асбест = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','Не помнят','maxz.ru','asbest-gid.ru','asbest.name','asbet.ru','asbest-online.ru');
-            var Рефтинский = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','Не помнят','reftinskiy.ru','reftnews.ru');
-            var Челябинск = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','Не помнят','74.ru','chel.barahla.net','ubu.ru/chelyabinsk','chelyabinsk.gde.ru','chelyabinsk.dorus.ru','chelyabinsk.bestru.ru','chelyabinsk.sopta.ru');
-            var ДО = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят');
-            
+            var СанктПетербург = Array('HeadHunter', 'SuperJob', 'Avito', 'Сайт Грузовичкоф', 'Сайт Таксовичкоф', 'Сайт БизнесФон', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят');
+            var Димитровград = СанктПетербург.concat(Array('trisosny.ru', '25kanal.ru', 'dimitrovgradros.flagma.ru'));
+            var Асбест = СанктПетербург.concat(Array('maxz.ru', 'asbest-gid.ru', 'asbest.name', 'asbet.ru', 'asbest-online.ru'));
+            var Рефтинский = СанктПетербург.concat(Array('reftinskiy.ru', 'reftnews.ru'));
+            var Челябинск = СанктПетербург.concat(Array('74.ru', 'chel.barahla.net', 'ubu.ru/chelyabinsk', 'chelyabinsk.gde.ru', 'chelyabinsk.dorus.ru', 'chelyabinsk.bestru.ru', 'chelyabinsk.sopta.ru'));
+            var ДО = СанктПетербург.concat(Array('HeadHunter', 'SuperJob', 'Avito', 'Сайт Грузовичкоф', 'Сайт Таксовичкоф', 'Сайт БизнесФон', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят'));
+
             function showAdv(v) {
                 var mas = eval(v);
                 var el = document.getElementById('adv');
@@ -29,13 +38,20 @@
                     el.appendChild(opt);
                 }
             }
+
         </script>
 
     </head>
-    <body>
+    <body onload="showAdv('СанктПетербург')">
+        
         <a href="http://biznesfon.ru"><img class="logimg" src="https://pp.userapi.com/c837636/v837636687/526af/LMmzKvJQDdM.jpg" alt="logotype"></a>
         <div class="animated fadeInDownBig">
-            <div class="headertext">Добавление нового кандидата:</div>
+            <div class="headertext">
+                <%
+                    String displayDate = LocalDate.parse(String.valueOf(session.getAttribute("dates")), DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
+                    out.print("Добавление нового кандидата на " + displayDate + " к " + session.getAttribute("times"));
+                %>
+            </div>
             <div class="one sevenths centered triple-padded">    
                 <form action="/hr/add/adding">
                     <input required class="gap-bottom" type="text" name="surname" placeholder="Фамилия">
@@ -43,14 +59,6 @@
                     <input required class="gap-bottom" type="text" name="patronymic" placeholder="Отчество">
                     <input required class="gap-bottom" aria-required="true" type="text" name="phonenumber" placeholder="9115557799" pattern="[9]{1}[0-9]{9}" >
                     <input required class="gap-bottom" aria-required="true" type="email" name="email" placeholder="operator@gmail.com">
-                    <select class="gap-bottom" name="status" required>
-                        <option selected disabled value=''>Статус</option>
-                        <option>собеседование</option>
-                        <option>обучение</option>
-                        <option>принят</option>
-                        <option>отказ</option>
-                        <option>неявка</option>
-                    </select>
 
                     <select class="gap-bottom" name="project" required>
                         <option selected disabled value=''>Проект</option>
@@ -80,6 +88,19 @@
                     <select class="gap-bottom" name="advertising" required id="adv">
                         <option selected disabled value=''>Рекламный источник</option>
                     </select> 
+
+                    <!--hr>Занесение статуса<hr>
+                    <select class="gap-bottom" name="status">
+                        <option selected style='background-color: #aaffaa;'>1) пригл. на собесед.</option>
+                        <option style='background-color: #aaffaa;'>2) пригл. на обучение</option>
+                        <option style='background-color: #ffffaa;'>3) на обучении</option>
+                        <option style='background-color: #aaffaa;'>4) выход на линию</option>
+                        <option style='background-color: #ffffaa;'>5) на линии</option>
+                        <option style='background-color: #ffaaaa;'>6) уволен</option>
+                        <option style='background-color: #ffaaaa;'>X) отказ</option>
+                        <option style='background-color: #ffaaaa;'>X) отказался</option>
+                        <option style='background-color: #ffaaaa;'>X) не выходит на связь</option>
+                    </select-->
 
                     <button class="pull-left btn-success">Добавить</button>
                 </form>    

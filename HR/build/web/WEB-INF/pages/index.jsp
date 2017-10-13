@@ -69,14 +69,14 @@
     <body>
 
         <a href="/hr/sign-out" class="pull-right btn btn-link">Выход [<% out.print(session.getAttribute("role")); %>]</a>
-        <a href="http://biznesfon.ru"><img class="logimg" src="https://pp.userapi.com/c837636/v837636687/526af/LMmzKvJQDdM.jpg" alt="logotype"></a>
+        <a target="_blank" rel="nofollow noopener" href="http://biznesfon.ru"><img class="logimg" src="https://pp.userapi.com/c837636/v837636687/526af/LMmzKvJQDdM.jpg" alt="logotype"></a>
 
         <div class="containerIndex">
             <div class="row">
                 <form action="Search" method="Post">
                     <div class="pull-right"> 
                         <input required class="phonenumber" type="text" name="phonenumber" placeholder="9115557799" pattern="[9]{1}[0-9]{9}">
-                        <button class="pull-right btn btn-link searchbtn" type="submit" name="action" value="SetBranch" >Поиск</button>
+                        <button class="pull-right btn btn-link searchbtn" type="submit" name="action" value="SetBranch" ><!--&#128269;-->Поиск</button>
                     </div>
                 </form>
 
@@ -100,58 +100,68 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">Дата</div>
                             <div class="panel-body scalable">
-                                <%
+                                <%                                   
                                     LocalDate date = LocalDate.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                                     String displayDate = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
 
                                     Calendar calendar = (Calendar) Calendar.getInstance();
-                                    int currentMonth = calendar.getTime().getMonth();
+                                    int currentMonth = calendar.getTime().getMonth() + 1;
+                                    int nextMonth = calendar.getTime().getMonth() + 2;
+                                    int currentDay = calendar.getTime().getDate();
+                                    int countOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-                                    ArrayList<String> months = new ArrayList<String>();
-                                    months.add("Январь");
-                                    months.add("Февраль");
-                                    months.add("Март");
-                                    months.add("Апрель");
-                                    months.add("Май");
-                                    months.add("Июнь");
-                                    months.add("Июль");
-                                    months.add("Август");
-                                    months.add("Сентябрь");
-                                    months.add("Октябрь");
-                                    months.add("Ноябрь");
-                                    months.add("Декабрь");
+                                    out.print("<h4><span>Месяц:</span></h4><ul>");
+                                    
+                                    for (int day = currentDay; day <= countOfDays; day++) {
+                                        String prepareDay, prepareMonth, checked = "";
 
-                                    for (int month = currentMonth + 1; month < currentMonth + 3; month++) {
+                                        if (currentMonth < 10) prepareMonth = ("0" + currentMonth);
+                                        else prepareMonth = "" + currentMonth;
+                                        
+                                        if (day < 10) prepareDay = ("0" + day);
+                                        else prepareDay = "" + day;
 
-                                        out.print("<h4><span>" + months.get(month - 1) + ":</span></h4><ul>");
+                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
+                                        System.out.println("currentMonth -->: " + query);
+                                        rs = statement.executeQuery(query);
+                                        rs.next();
+                                        if (("2017-" + prepareMonth + "-" + prepareDay).equals(dates)) checked = "checked";
 
-                                        calendar.set(2017, month - 1, 1);
-                                        int countOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+                                        String fill = "";
+                                        if (!rs.getString(1).equals("0")) fill = "fill";
 
-                                        for (int day = 1; day <= countOfDays; day++) {
-                                            String prepareDay, checked = "";
-                                            if (day < 10) {
-                                                prepareDay = ("0" + day);
-                                            } else {
-                                                prepareDay = "" + day;
-                                            }
-                                            query = "SELECT count(*) FROM candidates where dates = '2017-0" + month + "-" + prepareDay + "' and branch = '" + branch + "'";
-                                            rs = statement.executeQuery(query);
-                                            rs.next();
-                                            if (("2017-0" + month + "-" + prepareDay).equals(dates)) {
-                                                checked = "checked";
-                                            }
-                                            String fill = "";
-                                            if (!rs.getString(1).equals("0")) {
-                                                fill = "fill";
-                                            }
-                                            out.print("<li><label><input onClick='this.form.submit()' "
-                                                    + checked + " required type='radio' name='dates' value='2017-0"
-                                                    + month + "-" + prepareDay + "'>"
-                                                    + prepareDay + ".0" + month + ".2017</label><span class='badge " + fill + "'>" + rs.getString(1) + "</span></li>");
-                                        }
-                                        out.print("</ul>");
+                                        out.print("<li><label><input onClick='this.form.submit()' "
+                                                + checked + " required type='radio' name='dates' value='2017-"
+                                                + prepareMonth + "-" + prepareDay + "'>"
+                                                + prepareDay + "." + prepareMonth + ".2017</label><span class='badge " + fill + "'>" + rs.getString(1) + "</span></li>");
                                     }
+  
+                                    for (int day = 1; day < currentDay; day++) {
+                                        String prepareDay, prepareMonth, checked = "";
+
+                                        if (nextMonth < 10) prepareMonth = ("0" + nextMonth);
+                                        else prepareMonth = "" + nextMonth;
+                                        
+                                        if (day < 10) prepareDay = ("0" + day);
+                                        else prepareDay = "" + day;
+
+                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
+                                        System.out.println("nextMonth -->: " + query);
+                                        rs = statement.executeQuery(query);
+                                        rs.next();
+                                        if (("2017-" + prepareMonth + "-" + prepareDay).equals(dates)) checked = "checked";
+
+                                        String fill = "";
+                                        if (!rs.getString(1).equals("0")) fill = "fill";
+
+                                        out.print("<li><label><input onClick='this.form.submit()' "
+                                                + checked + " required type='radio' name='dates' value='2017-"
+                                                + prepareMonth + "-" + prepareDay + "'>"
+                                                + prepareDay + "." + prepareMonth + ".2017</label><span class='badge " + fill + "'>" + rs.getString(1) + "</span></li>");
+                                    }
+                                    
+                                    
+                                    out.print("</ul>");
                                 %>
                             </div>
                         </div>
@@ -222,13 +232,16 @@
                             </div>
                             <div class="panel-body">
                                 <div class='stroke header'>
-                                    <div class="normal">Фамилия</div>
+                                    <div class="verywider">Фамилия Имя Отчество</div>
+                                    <!--div class="normal">Фамилия</div>
                                     <div class="normal">Имя</div>
-                                    <div class="normal">Отчество</div>
+                                    <div class="normal">Отчество</div-->
                                     <div class="normal">Телефон</div>
                                     <div class="wider">e-mail</div>
                                     <div class="normal">Проект</div>
-                                    <div class="normal">Статус</div>
+                                    <div class="wider">Статус</div>
+                                    <!--div class="narrower">Action</div-->
+                                    <!--div class="normal">Менеджер</div-->
                                 </div>
                                 <hr>
                                 <%
@@ -248,13 +261,16 @@
                                         }
 
                                         out.print("<label><input required type='radio' name='candidate' value='" + rs.getString(5) + "'><div class='stroke'>"
-                                                + "<div class='normal'>" + rs.getString(2) + "</div>"
-                                                + "<div class='normal'>" + rs.getString(3) + "</div>"
-                                                + "<div class='normal'>" + rs.getString(4) + "</div>"
+                                                + "<div class='verywider'>" + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4) + "</div>"
+                                                /*+ "<div class='normal'>" + rs.getString(3) + "</div>"
+                                                + "<div class='normal'>" + rs.getString(4) + "</div>"*/
                                                 + "<div class='normal'>" + rs.getString(5) + "</div>"
                                                 + "<div class='wider' title='" + rs.getString(6) + "'>" + shortEmail + "</div>"
                                                 + "<div class='normal'>" + rs.getString(8) + "</div>"
-                                                + "<div class='normal'>" + rs.getString(7) + "</div></div></label>");
+                                                /*+ "<div class='normal'>" + rs.getString(15) + "</div>"*/
+                                                + "<div class='wider'>" + rs.getString(7) + "</div>"
+                                                /*+ "<div class='narrower'><button class='btn btn-warning btn-xs' type='button'>Ред.</button></div>"*/
+                                                + "</div></label>");
                                     }
                                     request.getSession().setAttribute("search", "false");
                                     request.getSession().setAttribute("dateSearch", null);
@@ -267,11 +283,12 @@
                     </div>
                 </form>
 
-                <form action="Download" method="Post">
+                <form action="Download" method="Get" target="_blank">
                     <div id="download">
 
-                        <div>Выгрузка:</div>
-                        <div><select class="gap-bottom" name="branch">
+                        
+                        <div>
+                            <select class="gap-bottom" name="branch">
                                 <option selected disabled value=''>Площадка</option>
                                 <option value="СанктПетербург">Санкт-Петербург</option>
                                 <option>Димитровград</option>
@@ -279,20 +296,34 @@
                                 <option>Асбест</option>
                                 <option>Челябинск</option>
                                 <option value='ДО'>Домашний оператор</option>
-                            </select></div>
+                            </select>
+                        </div>
 
+                        <%
+                            String prepareMonth, prepareDay;
+                            if (currentMonth < 10) prepareMonth = ("0" + currentMonth);
+                                else prepareMonth = "" + currentMonth;
+
+                                if (currentDay < 10) prepareDay = ("0" + currentDay);
+                                else prepareDay = "" + currentDay;
+                        %>
+                        
                         <div>c</div>
-                        <div><input type="date" name="from" required></div>
+                        <% out.print("<div><input type='date' name='from' required value='2017-" + prepareMonth + "-" + prepareDay + "'></div>"); %>
                         <div>по</div>
-                        <div><input type="date" name="to" required></div>
-
+                        <% out.print("<div><input type='date' name='to' required value='2017-" + prepareMonth + "-" + calendar.getActualMaximum(Calendar.DAY_OF_MONTH) + "'></div>"); %>
+                        
                         <div><select class="gap-bottom" name="status">
                                 <option selected disabled value=''>Статус</option>
-                                <option>собеседование</option>
-                                <option>обучение</option>
-                                <option>принят</option>
-                                <option>отказ</option>
-                                <option>неявка</option>
+                                <option>1) пригл. на собесед.</option>
+                                <option>2) пригл. на обучение</option>
+                                <option>3) на обучении</option>
+                                <option>4) выход на линию</option>
+                                <option>5) на линии</option>
+                                <option>6) уволен</option>
+                                <option>X) отказ</option>
+                                <option>X) отказался</option>
+                                <option>X) не выходит на связь</option>
                             </select></div>
 
                         <div><select class="gap-bottom" name="project">
@@ -315,9 +346,9 @@
                                 <option>HeadHunter</option>
                                 <option>SuperJob</option>
                                 <option>Avito</option>
-                                <option>gruzovichkof.ru</option>
-                                <option>taxovichkof.ru</option>
-                                <option>biznesfon.ru</option>
+                                <option>Сайт Грузовичкоф</option>
+                                <option>Сайт Таксовичкоф</option>
+                                <option>Сайт БизнесФон</option>
                                 <option>Яндекс.Работа</option>
                                 <option>Rabota.ru</option>
                                 <option>Не помнят</option>

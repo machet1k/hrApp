@@ -13,11 +13,9 @@ public class Download extends AbstractServlet {
     String url = "jdbc:derby://localhost:1527/hrdb";
     String username = "root";
     String password = "bcenter";
-
-    
-    
+ 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
  
         String query, branch, from, to, status, project, channel, advertising;
         
@@ -29,7 +27,11 @@ public class Download extends AbstractServlet {
         channel = request.getParameter("channel");
         advertising = request.getParameter("advertising");
         
-        query = "SELECT * FROM candidates WHERE dates >= '" + from + "' and dates <= '" + to + "'";
+        query = "select CANDIDATES.ID, CANDIDATES.SURNAME, CANDIDATES.NAME, CANDIDATES.patronymic, CANDIDATES.PHONENUMBER, CANDIDATES.email, " +
+                "CANDIDATES.STATUS as currentStatus, CANDIDATES.project, CANDIDATES.branch, CANDIDATES.DATES, CANDIDATES.TIMES, CANDIDATES.CHANNEL, " +
+                "CANDIDATES.advertising, CANDIDATES.regtime, CANDIDATES.manager, STATUSES.status, STATUSES.DATES as changed, STATUSES.REASON " +
+                "from CANDIDATES inner join STATUSES on (CANDIDATES.phonenumber = STATUSES.phonenumber) WHERE CANDIDATES.DATES >= '" + 
+                from + "' and CANDIDATES.DATES <= '" + to + "'";
         
         if (branch != null && !"null".equals(branch)) {
             request.getSession().setAttribute("branch-download", branch);
@@ -40,7 +42,7 @@ public class Download extends AbstractServlet {
         
         if (status != null && !"null".equals(status)) {
             request.getSession().setAttribute("status", status);
-            query += " and status = '" + status + "'"; 
+            query += " and CANDIDATES.status = '" + status + "'"; 
         }
         if (project != null && !"null".equals(project)) {
             request.getSession().setAttribute("project", project);
@@ -54,9 +56,11 @@ public class Download extends AbstractServlet {
             request.getSession().setAttribute("advertising", advertising);
             query += " and advertising = '" + advertising + "'";
         }
-
+        
+        query += " order by PHONENUMBER, statuses.status";
   
         request.getSession().setAttribute("query", query);
+       
         
         forward("/downloading.jsp");
     }

@@ -35,12 +35,13 @@
             String url = "jdbc:derby://localhost:1527/hrdb";
             String username = "root";
             String password = "bcenter";
-            // получение соединения с БД, расположенной по url, используя username/password
+            // получение соединения с БД, расположенной по url, используя username/password     
             Connection connection = DriverManager.getConnection(url, username, password);
             Statement statement = connection.createStatement();
+            Statement statement4help = connection.createStatement();
             String query = String.valueOf(request.getSession().getAttribute("query"));
-            ResultSet rs = null;
-
+            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs4help = statement4help.executeQuery(query);
             System.out.println("downloading > QUERY: " + query);
         %>
         <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -50,9 +51,8 @@
         <div class="containerDownload">
             <div class="row">
                 <div class="panel panel-default">
-
                     <div id="download">
-                        <form action="Download" method="Post">
+                        <form action="Download" method="Get">
 
                             <div> </div>
                             <div>
@@ -60,12 +60,12 @@
                                     <%
                                         String spb = "", dmt = "", rft = "", asb = "", chl = "", dom = "", null_branch = "";
 
-                                        if ("СанктПетербург".equals(session.getAttribute("branch-download"))) { spb = "selected";}
-                                        else if ("Димитровград".equals(session.getAttribute("branch-download"))) { dmt = "selected";}
-                                        else if ("Рефтинский".equals(session.getAttribute("branch-download")))   { rft = "selected";}
-                                        else if ("Асбест".equals(session.getAttribute("branch-download")))    { asb = "selected";}
-                                        else if ("Челябинск".equals(session.getAttribute("branch-download")))   { chl = "selected";}
-                                        else if ("ДО".equals(session.getAttribute("branch-download")))   { dom = "selected";}
+                                        if ("СанктПетербург".equals(session.getAttribute("branch-download")))       { spb = "selected";}
+                                        else if ("Димитровград".equals(session.getAttribute("branch-download")))    { dmt = "selected";}
+                                        else if ("Рефтинский".equals(session.getAttribute("branch-download")))      { rft = "selected";}
+                                        else if ("Асбест".equals(session.getAttribute("branch-download")))          { asb = "selected";}
+                                        else if ("Челябинск".equals(session.getAttribute("branch-download")))       { chl = "selected";}
+                                        else if ("ДО".equals(session.getAttribute("branch-download")))              { dom = "selected";}
                                         else { null_branch = "selected";}
 
                                         out.print(
@@ -75,7 +75,7 @@
                                           + "<option " + rft + " >Рефтинский</option>"
                                           + "<option " + asb + " >Асбест</option>"
                                           + "<option " + chl + " >Челябинск</option>"
-                                          + "<option " + dom + "  value='ДО'>Домашний оператор</option>");
+                                          + "<option " + dom + " value='ДО'>Домашний оператор</option>");
 
                                     %>
                                 </select>
@@ -90,22 +90,35 @@
                             <div>
                                 <select class="gap-bottom" name="status">
                                     <% 
-                                        String sob = "", ob = "", pr = "", otk = "", n = "", null_status = "";
+                                        String[] status = new String[9];
+                                        String null_status = "";
 
-                                        if ("собеседование".equals(session.getAttribute("status"))) { sob = "selected";}
-                                        else if ("обучение".equals(session.getAttribute("status"))) {  ob = "selected";}
-                                        else if ("принят".equals(session.getAttribute("status")))   {  pr = "selected";}
-                                        else if ("отказ".equals(session.getAttribute("status")))    { otk = "selected";}
-                                        else if ("неявка".equals(session.getAttribute("status")))   {   n = "selected";}
+                                        for (int i = 0; i < status.length; i++) {
+                                            status[i] = ""; 
+                                        }
+                                        
+                                        if ("1) пригл. на собесед.".equals(session.getAttribute("status"))) { status[0] = "selected";}
+                                        else if ("2) пригл. на обучение".equals(session.getAttribute("status"))) {  status[1] = "selected";}
+                                        else if ("3) на обучении".equals(session.getAttribute("status")))   {  status[2] = "selected";}
+                                        else if ("4) выход на линию".equals(session.getAttribute("status")))    { status[3] = "selected";}
+                                        else if ("5) на линии".equals(session.getAttribute("status")))   {   status[4] = "selected";}
+                                        else if ("6) уволен".equals(session.getAttribute("status")))   {   status[5] = "selected";}
+                                        else if ("X) отказ".equals(session.getAttribute("status")))   {   status[6] = "selected";}
+                                        else if ("X) отказался".equals(session.getAttribute("status")))   {   status[7] = "selected";}
+                                        else if ("X) не выходит на связь".equals(session.getAttribute("status")))   {   status[8] = "selected";}
                                         else { null_status = "selected";}
 
                                         out.print(
                                           "<option " + null_status + " value='null'>Все</option>"
-                                        + "<option " + sob + " value='собеседование'>собеседование</option>"
-                                        + "<option " + ob + " value='обучение'>обучение</option>"
-                                        + "<option " + pr + " value='принят'>принят</option>"
-                                        + "<option " + otk + " value='отказ'>отказ</option>"
-                                        + "<option " + n + " value='неявка'>неявка</option>"); %>
+                                        + "<option " + status[0] + ">1) пригл. на собесед.</option>"
+                                        + "<option " + status[1] + ">2) пригл. на обучение</option>"
+                                        + "<option " + status[2] + ">3) на обучении</option>"
+                                        + "<option " + status[3] + ">4) выход на линию</option>"
+                                        + "<option " + status[4] + ">5) на линии</option>"
+                                        + "<option " + status[5] + ">6) уволен</option>"
+                                        + "<option " + status[6] + ">X) отказ</option>"
+                                        + "<option " + status[7] + ">X) отказался</option>"
+                                        + "<option " + status[8] + ">X) не выходит на связь</option>"); %>
                                 </select>
                             </div>
 
@@ -115,10 +128,10 @@
                                     <%
                                         String gf = "", tf = "", dst = "", kst = "", null_project = "";
 
-                                        if ("Грузовичкоф".equals(session.getAttribute("project"))) { gf = "selected";}
-                                        else if ("Таксовичкоф".equals(session.getAttribute("project"))) { tf = "selected";}
-                                        else if ("Достаевский".equals(session.getAttribute("project")))   { dst = "selected";}
-                                        else if ("Кисточки".equals(session.getAttribute("project")))    { kst = "selected";}
+                                        if ("Грузовичкоф".equals(session.getAttribute("project")))          { gf = "selected";}
+                                        else if ("Таксовичкоф".equals(session.getAttribute("project")))     { tf = "selected";}
+                                        else if ("Достаевский".equals(session.getAttribute("project")))     { dst = "selected";}
+                                        else if ("Кисточки".equals(session.getAttribute("project")))        { kst = "selected";}
                                         else { null_project = "project";}
 
                                         out.print(
@@ -135,9 +148,9 @@
                                     <%
                                         String ot = "", hol = "", vh = "", null_channel = "";
 
-                                        if ("Исх.отклик".equals(session.getAttribute("project"))) { ot = "selected";}
+                                        if ("Исх.отклик".equals(session.getAttribute("project")))       { ot = "selected";}
                                         else if ("Исх.хол.зв.".equals(session.getAttribute("project"))) { hol = "selected";}
-                                        else if ("Входящий".equals(session.getAttribute("project")))   { vh = "selected";}
+                                        else if ("Входящий".equals(session.getAttribute("project")))    { vh = "selected";}
                                         else { null_channel = "channel";}
 
                                         out.print(
@@ -152,68 +165,72 @@
                             <div>
                                 <select class="gap-bottom" name="advertising">
                                     <%
-                                        String adv1 = "", adv2 = "", adv3 = "", adv4 = "", adv5 = "", adv6 = "", adv7 = "", adv8 = "", adv9 = "", adv10 = "",
-                                               adv11 = "", adv12 = "", adv13 = "", adv14 = "", adv15 = "", adv16 = "", adv17 = "", adv18 = "", adv19 = "", adv20 = "",
-                                               adv21 = "", adv22 = "", adv23 = "", adv24 = "", adv25 = "", adv26 = "", adv27 = "", null_advertising = "";
-
-                                        if      ("HeadHunter".equals(session.getAttribute("advertising"))) { adv1 = "selected";}
-                                        else if ("SuperJob".equals(session.getAttribute("advertising"))) { adv2 = "selected";}
-                                        else if ("Avito".equals(session.getAttribute("advertising"))) { adv3  = "selected";}
-                                        else if ("gruzovichkof.ru".equals(session.getAttribute("advertising"))) { adv4  = "selected";}
-                                        else if ("taxovichkof.ru".equals(session.getAttribute("advertising"))) { adv5  = "selected";}
-                                        else if ("biznesfon.ru".equals(session.getAttribute("advertising"))) { adv6  = "selected";}
-                                        else if ("Яндекс.Работа".equals(session.getAttribute("advertising"))) { adv7  = "selected";}
-                                        else if ("Rabota.ru".equals(session.getAttribute("advertising"))) { adv8  = "selected";}
-                                        else if ("Не помнят".equals(session.getAttribute("advertising"))) { adv9  = "selected";}
-                                        else if ("Знакомые".equals(session.getAttribute("advertising"))) { adv10 = "selected";}
-                                        else if ("trisosny.ru".equals(session.getAttribute("advertising"))) { adv11 = "selected";}
-                                        else if ("25kanal.ru".equals(session.getAttribute("advertising"))) { adv12 = "selected";}
-                                        else if ("dimitrovgradros.flagma.ru".equals(session.getAttribute("advertising"))) { adv13 = "selected";}
-                                        else if ("maxz.ru".equals(session.getAttribute("advertising"))) { adv14 = "selected";}
-                                        else if ("asbest-gid.ru".equals(session.getAttribute("advertising"))) { adv15 = "selected";}
-                                        else if ("asbest.name".equals(session.getAttribute("advertising"))) { adv16 = "selected";}
-                                        else if ("asbet.ru".equals(session.getAttribute("advertising"))) { adv17 = "selected";}
-                                        else if ("asbest-online.ru".equals(session.getAttribute("advertising"))) { adv18 = "selected";}
-                                        else if ("reftinskiy.ru".equals(session.getAttribute("advertising"))) { adv19 = "selected";}
-                                        else if ("reftnews.ru".equals(session.getAttribute("advertising"))) { adv20 = "selected";}
-                                        else if ("74.ru".equals(session.getAttribute("advertising"))) { adv21 = "selected";}
-                                        else if ("chel.barahla.net".equals(session.getAttribute("advertising"))) { adv22 = "selected";}
-                                        else if ("ubu.ru/chelyabinsk".equals(session.getAttribute("advertising"))) { adv23 = "selected";}
-                                        else if ("chelyabinsk.gde.ru".equals(session.getAttribute("advertising"))) { adv24 = "selected";}
-                                        else if ("chelyabinsk.dorus.ru".equals(session.getAttribute("advertising"))) { adv25 = "selected";}
-                                        else if ("chelyabinsk.bestru.ru".equals(session.getAttribute("advertising"))) { adv26 = "selected";}
-                                        else if ("chelyabinsk.sopta.ru".equals(session.getAttribute("advertising"))) { adv27 = "selected";}
+                                        String[] adv = new String[27]; 
+                                        String null_advertising = "";
+                                        String advertising = String.valueOf(session.getAttribute("advertising"));
+                                        
+                                        for (int i = 0; i < adv.length; i++) {
+                                            adv[i] = ""; 
+                                        }
+                                        
+                                        if      ("HeadHunter".equals(advertising))                  { adv[0]  = "selected";}
+                                        else if ("SuperJob".equals(advertising))                    { adv[1]  = "selected";}
+                                        else if ("Avito".equals(advertising))                       { adv[2]  = "selected";}
+                                        else if ("gruzovichkof.ru".equals(advertising))             { adv[3]  = "selected";}
+                                        else if ("taxovichkof.ru".equals(advertising))              { adv[4]  = "selected";}
+                                        else if ("biznesfon.ru".equals(advertising))                { adv[5]  = "selected";}
+                                        else if ("Яндекс.Работа".equals(advertising))               { adv[6]  = "selected";}
+                                        else if ("Rabota.ru".equals(advertising))                   { adv[7]  = "selected";}
+                                        else if ("Не помнят".equals(advertising))                   { adv[8]  = "selected";}
+                                        else if ("Знакомые".equals(advertising))                    { adv[9]  = "selected";}
+                                        else if ("trisosny.ru".equals(advertising))                 { adv[10] = "selected";}
+                                        else if ("25kanal.ru".equals(advertising))                  { adv[11] = "selected";}
+                                        else if ("dimitrovgradros.flagma.ru".equals(advertising))   { adv[12] = "selected";}
+                                        else if ("maxz.ru".equals(advertising))                     { adv[13] = "selected";}
+                                        else if ("asbest-gid.ru".equals(advertising))               { adv[14] = "selected";}
+                                        else if ("asbest.name".equals(advertising))                 { adv[15] = "selected";}
+                                        else if ("asbet.ru".equals(advertising))                    { adv[16] = "selected";}
+                                        else if ("asbest-online.ru".equals(advertising))            { adv[17] = "selected";}
+                                        else if ("reftinskiy.ru".equals(advertising))               { adv[18] = "selected";}
+                                        else if ("reftnews.ru".equals(advertising))                 { adv[19] = "selected";}
+                                        else if ("74.ru".equals(advertising))                       { adv[20] = "selected";}
+                                        else if ("chel.barahla.net".equals(advertising))            { adv[21] = "selected";}
+                                        else if ("ubu.ru/chelyabinsk".equals(advertising))          { adv[22] = "selected";}
+                                        else if ("chelyabinsk.gde.ru".equals(advertising))          { adv[23] = "selected";}
+                                        else if ("chelyabinsk.dorus.ru".equals(advertising))        { adv[24] = "selected";}
+                                        else if ("chelyabinsk.bestru.ru".equals(advertising))       { adv[25] = "selected";}
+                                        else if ("chelyabinsk.sopta.ru".equals(advertising))        { adv[26] = "selected";}
                                         else { null_status = "advertising";}
 
                                         out.print(
                                           "<option " + null_advertising + " value='null'>Все</option>"
-                                        + "<option " + adv1 + "  value='HeadHunter'>HeadHunter</option>"
-                                        + "<option " + adv2 + "  value='SuperJob'>SuperJob</option>"
-                                        + "<option " + adv3 + "  value='Avito'>Avito</option>"
-                                        + "<option " + adv4 + "  value='gruzovichkof.ru'>gruzovichkof.ru</option>"
-                                        + "<option " + adv5 + "  value='taxovichkof.ru'>taxovichkof.ru'</option>"
-                                        + "<option " + adv6 + "  value='biznesfon.ru'>biznesfon.ru</option>"
-                                        + "<option " + adv7 + "  value='Яндекс.Работа'>Яндекс.Работа</option>"
-                                        + "<option " + adv8 + "  value='Rabota.ru'>Rabota.ru</option>"
-                                        + "<option " + adv9 + "  value='Не помнят'>Не помнят</option>"
-                                        + "<option " + adv10 + " value='Знакомые'>Знакомые</option>"
-                                        + "<option " + adv11 + " value='trisosny.ru'>trisosny.ru</option>"
-                                        + "<option " + adv12 + " value='25kanal.ru'>25kanal.ru</option>"
-                                        + "<option " + adv13 + " value='dimitrovgradros.flagma.ru'>dimitrovgradros.flagma.ru</option>"
-                                        + "<option " + adv14 + " value='maxz.ru'>maxz.ru</option>"
-                                        + "<option " + adv15 + " value='asbest-gid.ru'>asbest-gid.ru</option>"
-                                        + "<option " + adv16 + " value='asbest.name'>asbest.name</option>"
-                                        + "<option " + adv17 + " value='asbet.ru'>asbet.ru</option>"
-                                        + "<option " + adv18 + " value='asbest-online.ru'>asbest-online.ru</option>"
-                                        + "<option " + adv19 + " value='reftinskiy.ru'>reftinskiy.ru</option>"
-                                        + "<option " + adv20 + " value='reftnews.ru'>reftnews.ru</option>"
-                                        + "<option " + adv21 + " value='74.ru'>74.ru</option>"
-                                        + "<option " + adv22 + " value='chel.barahla.net'>chel.barahla.net</option>"
-                                        + "<option " + adv23 + " value='ubu.ru/chelyabinsk'>ubu.ru/chelyabinsk</option>"
-                                        + "<option " + adv24 + " value='chelyabinsk.gde.ru'>chelyabinsk.gde.ru</option>"
-                                        + "<option " + adv25 + " value='chelyabinsk.dorus.ru'>chelyabinsk.dorus.ru</option>"
-                                        + "<option " + adv26 + " value='chelyabinsk.bestru.ru'>chelyabinsk.bestru.ru</option>"
-                                        + "<option " + adv27 + " value='chelyabinsk.sopta.ru'>chelyabinsk.sopta.ru</option>"); %>
+                                        + "<option " + adv[0] + "  value='HeadHunter'>HeadHunter</option>"
+                                        + "<option " + adv[1] + "  value='SuperJob'>SuperJob</option>"
+                                        + "<option " + adv[2] + "  value='Avito'>Avito</option>"
+                                        + "<option " + adv[3] + "  value='gruzovichkof.ru'>gruzovichkof.ru</option>"
+                                        + "<option " + adv[4] + "  value='taxovichkof.ru'>taxovichkof.ru'</option>"
+                                        + "<option " + adv[5] + "  value='biznesfon.ru'>biznesfon.ru</option>"
+                                        + "<option " + adv[6] + "  value='Яндекс.Работа'>Яндекс.Работа</option>"
+                                        + "<option " + adv[7] + "  value='Rabota.ru'>Rabota.ru</option>"
+                                        + "<option " + adv[8] + "  value='Не помнят'>Не помнят</option>"
+                                        + "<option " + adv[9] + " value='Знакомые'>Знакомые</option>"
+                                        + "<option " + adv[10] + " value='trisosny.ru'>trisosny.ru</option>"
+                                        + "<option " + adv[11] + " value='25kanal.ru'>25kanal.ru</option>"
+                                        + "<option " + adv[12] + " value='dimitrovgradros.flagma.ru'>dimitrovgradros.flagma.ru</option>"
+                                        + "<option " + adv[13] + " value='maxz.ru'>maxz.ru</option>"
+                                        + "<option " + adv[14] + " value='asbest-gid.ru'>asbest-gid.ru</option>"
+                                        + "<option " + adv[15] + " value='asbest.name'>asbest.name</option>"
+                                        + "<option " + adv[16] + " value='asbet.ru'>asbet.ru</option>"
+                                        + "<option " + adv[17] + " value='asbest-online.ru'>asbest-online.ru</option>"
+                                        + "<option " + adv[18] + " value='reftinskiy.ru'>reftinskiy.ru</option>"
+                                        + "<option " + adv[19] + " value='reftnews.ru'>reftnews.ru</option>"
+                                        + "<option " + adv[20] + " value='74.ru'>74.ru</option>"
+                                        + "<option " + adv[21] + " value='chel.barahla.net'>chel.barahla.net</option>"
+                                        + "<option " + adv[22] + " value='ubu.ru/chelyabinsk'>ubu.ru/chelyabinsk</option>"
+                                        + "<option " + adv[23] + " value='chelyabinsk.gde.ru'>chelyabinsk.gde.ru</option>"
+                                        + "<option " + adv[24] + " value='chelyabinsk.dorus.ru'>chelyabinsk.dorus.ru</option>"
+                                        + "<option " + adv[25] + " value='chelyabinsk.bestru.ru'>chelyabinsk.bestru.ru</option>"
+                                        + "<option " + adv[26] + " value='chelyabinsk.sopta.ru'>chelyabinsk.sopta.ru</option>"); %>
                                     </select>
                                 </div>
 
@@ -226,8 +243,9 @@
                                 %>        
 
                                 <div class="downloadbtn">
-                                    <button type="submit" class="btn btn-primary">Выгрузить</button>
+                                    <button type="submit" class="btn btn-success">Выгрузить</button>
                                     <button class="btn" onclick="this.form.reset();">Очистить</button>
+                                    <a href="/hr" class="btn btn-link">Вернуться к Dashboard</a>
                                 </div>
                         </form>
                     </div> 
@@ -244,37 +262,90 @@
                                 <td>Статус	</td>
                                 <td>Проект	</td>
                                 <td>Регион	</td>
-                                <td>Дата	</td>
-                                <td>Время	</td>
+                                <!--td>Дата	</td-->
+                                <!--td>Время	</td-->
                                 <td>Канал связи	</td>
                                 <td>Рекламный источник</td>
-                                <td>Время регистрации</td>
+                                <!--td>Время регистрации</td-->
                                 <td>Менеджер</td>
+                                <!--td>Дата собеседования</td>  
+                                <td>Дата обучения</td>            
+                                <td>Дата выхода на линию</td>                        
+                                <td>Дата отказа/увольнения</td-->   
+                                <!--td>Причина</td-->
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
                             </tr>
-                            <%connection = DriverManager.getConnection(url, username, password);
-                                statement = connection.createStatement();
-                                rs = statement.executeQuery(query);
-
+                            <%
+                                rs4help.next();
+                                rs.next();
+                                
+                                String displayDate1 = LocalDate.parse(rs.getString(17), DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
+                                out.print("<tr>"
+                                    + "<td>" + rs.getString(2) + "</td>"
+                                    + "<td>" + rs.getString(3) + "</td>"
+                                    + "<td>" + rs.getString(4) + "</td>"
+                                    + "<td>" + rs.getString(5) + "</td>"
+                                    + "<td>" + rs.getString(6) + "</td>"
+                                    + "<td>" + rs.getString(7) + "</td>"
+                                    + "<td>" + rs.getString(8) + "</td>"
+                                    + "<td>" + rs.getString(9) + "</td>"
+                                    //+ "<td>" + rs.getString(10) + "</td>"
+                                    //+ "<td>" + rs.getString(11) + "</td>"
+                                    + "<td>" + rs.getString(12) + "</td>"
+                                    + "<td>" + rs.getString(13) + "</td>"
+                                    //+ "<td>" + rs.getString(14) + "</td>"
+                                    + "<td>" + rs.getString(15) + "</td>"
+                                    //+ "<td>" + rs.getString(18) + "</td>"
+                                    + "<td>" + rs.getString(16) + "</td>"
+                                    + "<td>" + displayDate1 + "</td>");
+                                
+                                
                                 while (rs.next()) {
-                                    out.print("<tr>"
-                                            + "<td>" + rs.getString(2) + "</td>"
-                                            + "<td>" + rs.getString(3) + "</td>"
-                                            + "<td>" + rs.getString(4) + "</td>"
-                                            + "<td>" + rs.getString(5) + "</td>"
-                                            + "<td>" + rs.getString(6) + "</td>"
-                                            + "<td>" + rs.getString(7) + "</td>"
-                                            + "<td>" + rs.getString(8) + "</td>"
-                                            + "<td>" + rs.getString(9) + "</td>"
-                                            + "<td>" + rs.getString(10) + "</td>"
-                                            + "<td>" + rs.getString(11) + "</td>"
-                                            + "<td>" + rs.getString(12) + "</td>"
-                                            + "<td>" + rs.getString(13) + "</td>"
-                                            + "<td>" + rs.getString(14) + "</td>"
-                                            + "<td>" + rs.getString(15) + "</td></tr>"
-                                    );
+                                    // если в текущей и след.строчке разные номера тел., то сливаем даты статусов в одну запись
+                                    if (!rs.getString(5).equals(rs4help.getString(5))) { 
+                                        String displayDate = LocalDate.parse(rs.getString(17), DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
+                                        out.print("</tr><tr>"
+                                            + "<td>" + rs.getString(2) + "</td>" // Ф
+                                            + "<td>" + rs.getString(3) + "</td>" // И
+                                            + "<td>" + rs.getString(4) + "</td>" // О
+                                            + "<td>" + rs.getString(5) + "</td>" // тел.
+                                            + "<td>" + rs.getString(6) + "</td>" // почта
+                                            + "<td>" + rs.getString(7) + "</td>" // статус
+                                            + "<td>" + rs.getString(8) + "</td>" // проект
+                                            + "<td>" + rs.getString(9) + "</td>" // регион
+                                            //+ "<td>" + rs.getString(10) + "</td>"
+                                            //+ "<td>" + rs.getString(11) + "</td>"
+                                            + "<td>" + rs.getString(12) + "</td>" // канал
+                                            + "<td>" + rs.getString(13) + "</td>" // рекл.ист.
+                                            //+ "<td>" + rs.getString(14) + "</td>"
+                                            + "<td>" + rs.getString(15) + "</td>" // менеджер
+                                            + "<td>" + rs.getString(16) + "</td>"
+                                            + "<td>" + displayDate + "</td>"); // этап 1
+                                    } else {
+                                        String displayDate = LocalDate.parse(rs.getString(17), DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
+                                        out.print("<td>" + rs.getString(16) + "</td>");
+                                        out.print("<td>" + displayDate + "</td>"); // этап 2-6
+                                        if (rs.getString(16).equals("6) уволен") ||
+                                                rs.getString(16).equals("X) отказ") ||
+                                                rs.getString(16).equals("X) отказался") ||
+                                                rs.getString(16).equals("X) не выходит на связь")) out.print("<td>" + rs.getString(18) + "</td>");
+                                        
+                                    }
+                                    
+                                    rs4help.next();   
                                 }
+                                
+                                out.print("<tr>");
                             %>
-
                         </table>
                     </div>
                     <!--div class="sign"> 

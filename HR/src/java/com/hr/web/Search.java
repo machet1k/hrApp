@@ -36,8 +36,6 @@ public class Search extends AbstractServlet {
                 request.getSession().setAttribute("timeSearch", rs.getString(11));
             }
             redirect("/hr");
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException | SQLException e) { e.printStackTrace(); }
     }
 }

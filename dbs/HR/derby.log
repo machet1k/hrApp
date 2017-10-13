@@ -1,7 +1,7 @@
-Mon Aug 28 11:08:20 MSK 2017 : Сетевой сервер Apache Derby Network Server - 10.10.2.0 - (1582446) запущен и готов принимать соединения на порту 1527 на {3} 
+Mon Sep 18 10:49:58 MSK 2017 : Сетевой сервер Apache Derby Network Server - 10.10.2.0 - (1582446) запущен и готов принимать соединения на порту 1527 на {3} 
 ----------------------------------------------------------------
-Mon Aug 28 11:18:49 MSK 2017:
- Производится загрузка Derby версии The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): экземпляр a816c00e-015e-27e2-4413-000006749510
+Mon Sep 18 10:54:33 MSK 2017:
+ Производится загрузка Derby версии The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): экземпляр a816c00e-015e-93f7-188c-000006749510
 в каталоге базы данных Z:\Project\dbs\HR\hrdb sun.misc.Launcher$AppClassLoader@6f94fa3e 
 
 java.vendor=Oracle Corporation

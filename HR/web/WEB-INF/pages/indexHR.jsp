@@ -76,7 +76,7 @@
                 <form action="Search" method="Post">
                     <div class="pull-right"> 
                         <input required class="phonenumber" type="text" name="phonenumber" placeholder="9115557799" pattern="[9]{1}[0-9]{9}">
-                        <button class="pull-right btn btn-link searchbtn" type="submit" name="action" value="SetBranch" ><!--&#128269;-->Поиск</button>
+                        <button class="pull-right btn btn-link searchbtn" type="submit" name="action" value="SetBranch" >Поиск</button>
                     </div>
                 </form>
 
@@ -121,7 +121,8 @@
                                         if (day < 10) prepareDay = ("0" + day);
                                         else prepareDay = "" + day;
 
-                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
+                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay
+                                                + "' and branch = '" + branch + "' and status = 'собеседование'";
                                         System.out.println("currentMonth -->: " + query);
                                         rs = statement.executeQuery(query);
                                         rs.next();
@@ -145,7 +146,8 @@
                                         if (day < 10) prepareDay = ("0" + day);
                                         else prepareDay = "" + day;
 
-                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
+                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay 
+                                                + "' and branch = '" + branch + "' and status = 'собеседование'";
                                         System.out.println("nextMonth -->: " + query);
                                         rs = statement.executeQuery(query);
                                         rs.next();
@@ -196,7 +198,7 @@
                                             }
                                             query = "SELECT count(*) FROM candidates where dates = '" + dates
                                                     + "' and times = '" + hoursFrom + minutesFrom
-                                                    + "' and branch = '" + branch + "'";
+                                                    + "' and branch = '" + branch + "' and status = 'собеседование'";
                                             rs = statement.executeQuery(query);
                                             rs.next();
                                             if ((hoursFrom + minutesFrom).equals(times) || (hoursFrom + minutesFrom + ":00").equals(times)) {
@@ -240,14 +242,13 @@
                                     <div class="wider">e-mail</div>
                                     <div class="normal">Проект</div>
                                     <div class="wider">Статус</div>
-                                    <!--div class="narrower">Action</div-->
                                     <!--div class="normal">Менеджер</div-->
                                 </div>
                                 <hr>
                                 <%
                                     query = "SELECT * FROM candidates where dates = '" + dates
                                             + "' and times = '" + times
-                                            + "' and branch = '" + branch + "'";
+                                            + "' and branch = '" + branch + "' and status = 'собеседование'";
                                     System.out.println("index > QUERY: " + query);
                                     connection = DriverManager.getConnection(url, username, password);
                                     statement = connection.createStatement();
@@ -268,9 +269,7 @@
                                                 + "<div class='wider' title='" + rs.getString(6) + "'>" + shortEmail + "</div>"
                                                 + "<div class='normal'>" + rs.getString(8) + "</div>"
                                                 /*+ "<div class='normal'>" + rs.getString(15) + "</div>"*/
-                                                + "<div class='wider'>" + rs.getString(7) + "</div>"
-                                                /*+ "<div class='narrower'><button class='btn btn-warning btn-xs' type='button'>Ред.</button></div>"*/
-                                                + "</div></label>");
+                                                + "<div class='wider'>" + rs.getString(7) + "</div></div></label>");
                                     }
                                     request.getSession().setAttribute("search", "false");
                                     request.getSession().setAttribute("dateSearch", null);
@@ -283,101 +282,6 @@
                     </div>
                 </form>
 
-                <form action="Download" method="Get" target="_blank">
-                    <div id="download">
-
-                        
-                        <div>
-                            <select class="gap-bottom" name="branch">
-                                <option selected disabled value=''>Площадка</option>
-                                <option value="СанктПетербург">Санкт-Петербург</option>
-                                <option>Димитровград</option>
-                                <option>Рефтинский</option>
-                                <option>Асбест</option>
-                                <option>Челябинск</option>
-                                <option value='ДО'>Домашний оператор</option>
-                            </select>
-                        </div>
-
-                        <%
-                            String prepareMonth, prepareDay;
-                            if (currentMonth < 10) prepareMonth = ("0" + currentMonth);
-                                else prepareMonth = "" + currentMonth;
-
-                                if (currentDay < 10) prepareDay = ("0" + currentDay);
-                                else prepareDay = "" + currentDay;
-                        %>
-                        
-                        <div>c</div>
-                        <% out.print("<div><input type='date' name='from' required value='2017-" + prepareMonth + "-" + prepareDay + "'></div>"); %>
-                        <div>по</div>
-                        <% out.print("<div><input type='date' name='to' required value='2017-" + prepareMonth + "-" + calendar.getActualMaximum(Calendar.DAY_OF_MONTH) + "'></div>"); %>
-                        
-                        <div><select class="gap-bottom" name="status">
-                                <option selected disabled value=''>Статус</option>
-                                <option>1) пригл. на собесед.</option>
-                                <option>2) пригл. на обучение</option>
-                                <option>3) на обучении</option>
-                                <option>4) выход на линию</option>
-                                <option>5) на линии</option>
-                                <option>6) уволен</option>
-                                <option>X) отказ</option>
-                                <option>X) отказался</option>
-                                <option>X) не выходит на связь</option>
-                            </select></div>
-
-                        <div><select class="gap-bottom" name="project">
-                                <option selected disabled value=''>Проект</option>
-                                <option>Грузовичкоф</option>
-                                <option>Таксовичкоф</option>
-                                <option>Достаевский</option>
-                                <option>Кисточки</option>
-                            </select></div>
-
-                        <div><select class="gap-bottom" name="channel">
-                                <option selected disabled value=''>Канал связи</option>
-                                <option title="Исходящий(отклик)">Исх.отклик</option>
-                                <option title="Исходящий(холодный звонок)">Исх.хол.зв.</option>
-                                <option title="Входящий">Входящий</option>
-                            </select></div>
-
-                        <div><select class="gap-bottom" name="advertising">
-                                <option selected disabled value=''>Рекламный источник</option>
-                                <option>HeadHunter</option>
-                                <option>SuperJob</option>
-                                <option>Avito</option>
-                                <option>Сайт Грузовичкоф</option>
-                                <option>Сайт Таксовичкоф</option>
-                                <option>Сайт БизнесФон</option>
-                                <option>Яндекс.Работа</option>
-                                <option>Rabota.ru</option>
-                                <option>Не помнят</option>
-                                <option>Знакомые</option>
-                                <option>trisosny.ru</option>
-                                <option>25kanal.ru</option>
-                                <option>dimitrovgradros.flagma.ru</option>
-                                <option>maxz.ru</option>
-                                <option>asbest-gid.ru</option>
-                                <option>asbest.name</option>
-                                <option>asbet.ru</option>
-                                <option>asbest-online.ru</option>
-                                <option>reftinskiy.ru</option>
-                                <option>reftnews.ru</option>
-                                <option>74.ru</option>
-                                <option>chel.barahla.net</option>
-                                <option>ubu.ru/chelyabinsk</option>
-                                <option>chelyabinsk.gde.ru</option>
-                                <option>chelyabinsk.dorus.ru</option>
-                                <option>chelyabinsk.bestru.ru</option>
-                                <option>chelyabinsk.sopta.ru</option>
-                            </select></div>
-
-                        <div class="downloadbtn">
-                            <button type="submit" class="btn btn-primary">Выгрузить</button>
-                            <button type="reset" class="btn">Очистить</button>
-                        </div>
-                    </div> 
-                </form>
                 <div class="sign"> 
                     &copy; This application has been created by Roman Kharitonov. All rights reserved.
                 </div> 

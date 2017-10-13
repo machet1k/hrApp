@@ -1,5 +1,6 @@
 body {
     font-family: monospace;
+    background: #fafafa;
 }
 
 h3 {
@@ -67,27 +68,42 @@ align_left {
 
 .stroke {
     float: left; 
+    text-align: center;
 }
 
 .stroke .normal {
     float: left; 
     width: 115px; 
     height: 25px;
-    text-align: center;
+    
 }
 
 .stroke .wider {
     float: left; 
     width: 175px; 
     height: 25px;
-    text-align: center;
+    
+}
+
+.stroke .verywider {
+    float: left; 
+    width: 220px; 
+    height: 25px;
+    
+}
+
+.stroke .narrower {
+    float: left; 
+    width: 40px; 
+    height: 25px;
+    
 }
 
 .stroken div {
     float: left; 
     width: 127px; 
     height: 25px;
-    text-align: center;
+    
 }
 
 .header {
@@ -113,12 +129,12 @@ hr {
 }
 
 .containerEdit {
-    width: 740px;
+    width: 900px;
     margin: 0 auto;
 }
 
 .containerDownload {
-    width: 1580px;
+    width: 1800px;
     margin: 0 auto;
 }
 
@@ -135,7 +151,7 @@ hr {
 }
 
 #candidates {
-    width: 940px;
+    width: 900px;
     float: left;
     padding: 7px;
 }
@@ -146,7 +162,7 @@ hr {
 
 
 #buffer,#edit,#statusdate {
-    width: 240px;
+    width: 290px;
     float: left;
     padding: 10px;
 }
@@ -160,15 +176,14 @@ body {
     background-position:top center;
     background-attachment:fixed;
     background-repeat:no-repeat;
-    /*background-image: url("https://ucarecdn.com/54a5fc80-5ca1-43d1-b27f-e3a398d171f0/");
-    ackground-image: url("https://ucarecdn.com/54a5fc80-5ca1-43d1-b27f-e3a398d171f0/");
-*/}
+    overflow: hidden;
+}
 
 .logimg {
     position: absolute;
     width: 200px;
     top: 840px;
-    left:1700px;
+    left: 1700px;
     opacity: 0.4;
 }
 
@@ -212,6 +227,10 @@ body {
     margin: 0;
 }
 
+.bigfont {
+    font-size: 20px;
+}
+
 .choose {
     margin-right: 30px;
 }
@@ -224,3 +243,10 @@ body {
     background-color: #337ab7;
 }
 
+td tr {
+    text-align: center;
+}
+
+#reason, #noteToStatus {
+    display: none;
+}

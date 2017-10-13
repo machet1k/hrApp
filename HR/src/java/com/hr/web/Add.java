@@ -21,7 +21,7 @@ public class Add extends AbstractServlet {
             redirect("/hr");
         } else switch (action) {
             case "Add":
-                forward("/addCandidate.html");
+                forward("/addCandidate.jsp");
                 break;
             case "SetBranch":
                 request.getSession().setAttribute("branch", request.getParameter("branch"));

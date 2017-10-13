@@ -60,21 +60,24 @@ public class Edit extends AbstractServlet {
                         + "', times = '" + request.getParameter("times")
                         + "', channel = '" + request.getParameter("channel")
                         + "', advertising = '" + request.getParameter("advertising")
+                        //+ "', reason = '" + reason
                         + "', branch = '" + request.getParameter("branch") + "' where phonenumber = '" + candidateNumber + "'";
-                System.out.println("Edit.java > QUERY: " + query);
-                
-                long currentTimeMillis = System.currentTimeMillis();                
-                
-                String currentDateBD = new SimpleDateFormat("yyyy-MM-dd").format(currentTimeMillis);                
-                String currentTime = new SimpleDateFormat("HH:mm").format(currentTimeMillis);                
+                System.out.println("Edit.java > QUERY: " + query);          
                 
                 // пишем историю изменения статусов
                 if (!request.getParameter("status").equals(request.getSession().getAttribute("status"))) {
-                    queryStatus = "insert into statuses(phonenumber, status, dates, times) values('"
+                    String changedStatus = null;
+                    if (!request.getParameter("status").equals("3) на обучении") && !request.getParameter("status").equals("5) на линии")) 
+                        changedStatus = request.getParameter("changedStatus");
+
+                    String reason = request.getParameter("reason");
+                    if (reason == null) reason = "–";
+                    
+                    queryStatus = "insert into statuses(phonenumber, status, dates, reason) values('"
                             + request.getParameter("phonenumber") + "','"
                             + request.getParameter("status") + "','"
-                            + currentDateBD + "','"
-                            + currentTime + "')";
+                            + changedStatus + "','"
+                            + reason + "')";
                     System.out.println("Edit.java > QUERY (status): " + queryStatus);
                 }
                 
