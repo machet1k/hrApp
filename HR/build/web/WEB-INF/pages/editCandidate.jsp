@@ -25,29 +25,28 @@
         <link href="css/groundwork.css" type="text/css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <link rel="icon" type="image/x-icon" href="http://savepic.ru/14659608.png"/>
-        
+
         <script>
-            var СанктПетербург = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят');
-            var Димитровград = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','trisosny.ru','25kanal.ru','dimitrovgradros.flagma.ru');
-            var Асбест = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','maxz.ru','asbest-gid.ru','asbest.name','asbet.ru','asbest-online.ru');
-            var Рефтинский = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','reftinskiy.ru','reftnews.ru');
-            var Челябинск = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','74.ru','chel.barahla.net','ubu.ru/chelyabinsk','chelyabinsk.gde.ru','chelyabinsk.dorus.ru','chelyabinsk.bestru.ru','chelyabinsk.sopta.ru');
-            var ДО = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят');
-            
+            var СанктПетербург = Array('HeadHunter', 'SuperJob', 'Avito', 'gruzovichkof.ru', 'taxovichkof.ru', 'biznesfon.ru', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят');
+            var Димитровград = Array('HeadHunter', 'SuperJob', 'Avito', 'gruzovichkof.ru', 'taxovichkof.ru', 'biznesfon.ru', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят', 'trisosny.ru', '25kanal.ru', 'dimitrovgradros.flagma.ru');
+            var Асбест = Array('HeadHunter', 'SuperJob', 'Avito', 'gruzovichkof.ru', 'taxovichkof.ru', 'biznesfon.ru', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят', 'maxz.ru', 'asbest-gid.ru', 'asbest.name', 'asbet.ru', 'asbest-online.ru');
+            var Рефтинский = Array('HeadHunter', 'SuperJob', 'Avito', 'gruzovichkof.ru', 'taxovichkof.ru', 'biznesfon.ru', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят', 'reftinskiy.ru', 'reftnews.ru');
+            var Челябинск = Array('HeadHunter', 'SuperJob', 'Avito', 'gruzovichkof.ru', 'taxovichkof.ru', 'biznesfon.ru', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят', '74.ru', 'chel.barahla.net', 'ubu.ru/chelyabinsk', 'chelyabinsk.gde.ru', 'chelyabinsk.dorus.ru', 'chelyabinsk.bestru.ru', 'chelyabinsk.sopta.ru');
+            var ДО = Array('HeadHunter', 'SuperJob', 'Avito', 'gruzovichkof.ru', 'taxovichkof.ru', 'biznesfon.ru', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят');
             function showAdv(v) {
-                var mas = eval(v);
-                var el = document.getElementById('adv');
-                while (el.childNodes.length > 0) {
-                    el.removeChild(el.childNodes[el.childNodes.length - 1]);
-                }
-                for (var i = 0; i < mas.length; i++) {
-                    var opt = document.createElement("option");
-                    opt.innerHTML = mas[i];
-                    el.appendChild(opt);
-                }
+            var mas = eval(v);
+            var el = document.getElementById('adv');
+            while (el.childNodes.length > 0) {
+            el.removeChild(el.childNodes[el.childNodes.length - 1]);
+            }
+            for (var i = 0; i < mas.length; i++) {
+            var opt = document.createElement("option");
+            opt.innerHTML = mas[i];
+            el.appendChild(opt);
+            }
             }
         </script>
-        
+
     </head>
     <body onload="showAdv('СанктПетербург')">
         <a href="http://biznesfon.ru"><img class="logimg" src="https://pp.userapi.com/c837636/v837636687/526af/LMmzKvJQDdM.jpg" alt="logotype"></a>
@@ -64,13 +63,13 @@
                         Statement statement = connection.createStatement();
                         String query;
                         ResultSet rs = null;
-
+                        
                         LocalDate date = LocalDate.parse(String.valueOf(request.getSession().getAttribute("dates")), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                         String displayDate = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
-
+                        
                         Calendar calendar = (Calendar) Calendar.getInstance();
                         int currentMonth = calendar.getTime().getMonth();
-
+                        
                         ArrayList<String> months = new ArrayList<String>();
                         months.add("Январь");
                         months.add("Февраль");
@@ -84,26 +83,28 @@
                         months.add("Октябрь");
                         months.add("Ноябрь");
                         months.add("Декабрь");
-
+                        
                         String candidateNumber = request.getParameter("candidate");
                         session.setAttribute("number", candidateNumber);
-
-                        query = "SELECT * FROM candidates where phonenumber = '" + candidateNumber + "'";
-                        System.out.println(query);
-
+                        
+                        query = "SELECT * FROM candidates WHERE phonenumber = '" + candidateNumber + "'";
+                        System.out.println("editCandidate > QUERY: " + query);
+                        
                         connection = DriverManager.getConnection(url, username, password);
                         statement = connection.createStatement();
                         rs = statement.executeQuery(query);
                         rs.next();
-
+                        
                         session.setAttribute("status", rs.getString(7));
-
+                        session.setAttribute("dates", rs.getString(10));
+                        session.setAttribute("times", rs.getString(11));
+                        
                         out.print("<input required class='gap-bottom' type='text' name='surname' placeholder='Фамилия' value='" + rs.getString(2) + "'>");
                         out.print("<input required class='gap-bottom' type='text' name='name' placeholder='Имя' value='" + rs.getString(3) + "'>");
                         out.print("<input required class='gap-bottom' type='text' name='patronymic' placeholder='Отчество' value='" + rs.getString(4) + "'>");
                         out.print("<input required class='gap-bottom' type='text' name='phonenumber' value='"
                                 + rs.getString(5) + "'aria-required='true' pattern='[9]{1}[0-9]{9}' readonly>");
-                         out.print("<input required class='gap-bottom' type='text' name='email' value='"
+                        out.print("<input required class='gap-bottom' type='text' name='email' value='"
                                 + rs.getString(6) + "'aria-required='true'>");
                         // Статус
                         out.print("<select class='gap-bottom' required name='status'>"
@@ -137,14 +138,18 @@
                         // Рекламный источник
                         out.print("<select class='gap-bottom' name='advertising' required id='adv'>"
                                 + "<option selected>" + rs.getString(13) + "</option></select>");
-                        
-                        out.print("<select class='gap-bottom' name='dates' required>");
-                        String currentDate = String.valueOf(request.getSession().getAttribute("dates"));
-                        for (int month = currentMonth + 1; month < currentMonth + 3; month++) {
 
+                        // Дата
+                        out.print("<select class='gap-bottom' name='dates' required>");
+                        
+                        String currentDate = String.valueOf(request.getSession().getAttribute("dates"));
+                        System.out.println("editCandidate > currentDate = " + currentDate);
+                        
+                        for (int month = currentMonth + 1; month < currentMonth + 3; month++) {
+                            
                             calendar.set(2017, month - 1, 1);
                             int countOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-
+                            
                             for (int day = 1; day <= countOfDays; day++) {
                                 String prepareDay, selected = "";
                                 if (day < 10) {
@@ -160,18 +165,21 @@
                                         + prepareDay + ".0" + month + ".2017</option>");
                             }
                         }
-                        out.print("</select>");                            
+                        out.print("</select>");
+
+                        // Время
                         out.print("<select class='gap-bottom' name='times' required>");
-
-                        String currentTime = String.valueOf(request.getSession().getAttribute("times"));
-
+                        
+                        String currentTime = String.valueOf(request.getSession().getAttribute("times")).substring(0, 5);
+                        System.out.println("editCandidate > currentTime = " + currentTime);
+                        
                         for (int hoursFrom = 10; hoursFrom < 19; hoursFrom++) {
                             for (int j = 0; j < 2; j++) {
                                 String minutesFrom;
                                 String minutesTo;
                                 int hoursTo;
                                 String selected = "";
-
+                                
                                 if (j % 2 == 0) {
                                     minutesFrom = ":00";
                                     minutesTo = ":30";
@@ -181,7 +189,7 @@
                                     minutesTo = ":00";
                                     hoursTo = hoursFrom + 1;
                                 }
-
+                                
                                 if ((hoursFrom + minutesFrom).equals(currentTime)) {
                                     selected = "selected";
                                 }
@@ -199,15 +207,15 @@
                 </form> 
             </div>
             <div id="statusdate">
-            <%    
-                String queryStatus = "select status, dates, times from statuses where phonenumber = '" + candidateNumber + "'";
-                rs = statement.executeQuery(queryStatus);
-                while(rs.next()){
-                    date = LocalDate.parse(String.valueOf(rs.getString(2)), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    displayDate = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
-                    out.print("<span>" + displayDate + "</span><span>" + rs.getString(3) + "</span><span>" + rs.getString(1) + "</span><br>");
-                }
-            %> 
+                <%
+                    String queryStatus = "select status, dates, times from statuses where phonenumber = '" + candidateNumber + "'";
+                    rs = statement.executeQuery(queryStatus);
+                    while (rs.next()) {
+                        date = LocalDate.parse(String.valueOf(rs.getString(2)), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                        displayDate = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
+                        out.print("<span>" + displayDate + "</span><span>" + rs.getString(3) + "</span><span>" + rs.getString(1) + "</span><br>");
+                    }
+                %> 
             </div>
         </div>
     </body>

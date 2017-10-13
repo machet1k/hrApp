@@ -17,13 +17,19 @@ public class Add extends AbstractServlet {
         request.getSession().setAttribute("dates", request.getParameter("dates"));
         request.getSession().setAttribute("times", request.getParameter("times"));
         
-        if ("Add".equals(action)) {     
-            forward("/addCandidate.html");
-        } else if ("SetBranch".equals(action)) {
-            request.getSession().setAttribute("branch", request.getParameter("branch"));
-            redirect("/hr"); 
-        } else {
+        if (null == action) {
             redirect("/hr");
+        } else switch (action) {
+            case "Add":
+                forward("/addCandidate.html");
+                break;
+            case "SetBranch":
+                request.getSession().setAttribute("branch", request.getParameter("branch"));
+                redirect("/hr");
+                break;
+            default:
+                redirect("/hr");
+                break;
         }
     }   
 }

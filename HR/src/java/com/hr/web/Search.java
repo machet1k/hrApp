@@ -23,7 +23,7 @@ public class Search extends AbstractServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String query = "SELECT * FROM candidates WHERE phonenumber = '" + request.getParameter("phonenumber") + "'";
-        //System.out.println("Search: " + query);
+        System.out.println("\nSearch > QUERY: " + query);
         
         try {
             Connection connection = DriverManager.getConnection(url, username, password);

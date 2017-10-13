@@ -14,23 +14,47 @@ public class Download extends AbstractServlet {
     String username = "root";
     String password = "bcenter";
 
+    
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+ 
+        String query, branch, from, to, status, project, channel, advertising;
         
-        String query, branch, from, to, project, channel, advertising;
-
         branch = request.getParameter("branch");
         from = request.getParameter("from");
         to = request.getParameter("to");
+        status = request.getParameter("status");
         project = request.getParameter("project");
         channel = request.getParameter("channel");
         advertising = request.getParameter("advertising");
-
+        
         query = "SELECT * FROM candidates WHERE dates >= '" + from + "' and dates <= '" + to + "'";
-        if (     branch != null) query += " and branch = '" + branch + "'";  
-        if (    project != null) query += " and project = '" + project + "'";  
-        if (    channel != null) query += " and channel = '" + channel + "'";  
-        if (advertising != null) query += " and advertising = '" + advertising + "'";
+        
+        if (branch != null && !"null".equals(branch)) {
+            request.getSession().setAttribute("branch-download", branch);
+            query += " and branch = '" + branch + "'"; 
+        }
+        if (from != null && !"null".equals(from)) request.getSession().setAttribute("from", from);
+        if (to != null && !"null".equals(to)) request.getSession().setAttribute("to", to);
+        
+        if (status != null && !"null".equals(status)) {
+            request.getSession().setAttribute("status", status);
+            query += " and status = '" + status + "'"; 
+        }
+        if (project != null && !"null".equals(project)) {
+            request.getSession().setAttribute("project", project);
+            query += " and project = '" + project + "'";  
+        }
+        if (channel != null && !"null".equals(channel)) {
+            request.getSession().setAttribute("channel", channel);
+            query += " and channel = '" + channel + "'";  
+        }
+        if (advertising != null && !"null".equals(advertising)) {
+            request.getSession().setAttribute("advertising", advertising);
+            query += " and advertising = '" + advertising + "'";
+        }
+
   
         request.getSession().setAttribute("query", query);
         

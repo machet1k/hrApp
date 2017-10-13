@@ -14,12 +14,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+ 
 @WebServlet({"/sign-in", "/sign-out", "/add/adding"})
 public class Authentication extends AbstractServlet{
 
-    //private static final com.hr.helpers.Sender sslSender = new com.hr.helpers.Sender("haritonov.r@b-fon.ru", "m9VCPPmN");
-    private static final com.hr.helpers.Sender sslSender = new com.hr.helpers.Sender("neutrinoteammachet1k@gmail.com", "decbblec0olP");
+    //private static final com.hr.helpers.Sender sender = new com.hr.helpers.Sender("haritonov.r@b-fon.ru", "m9VCPPmN");    
+    private static final com.hr.helpers.Sender SENDER = new com.hr.helpers.Sender("neutrinoteammachet1k@gmail.com", "decbblec0olP");
+    
+    private static final String MANAGER = "manager";
+    private static final String PASS_MANAGER = "biznesfon";
+    
+    private static final String ADMIN = "admin";
+    private static final String PASS_ADMIN = "biznesphone";
     
     @Override
     protected void doGet(String address) throws ServletException, IOException {
@@ -29,12 +35,10 @@ public class Authentication extends AbstractServlet{
                 break;
             case "/sign-out":
                 onSignOut(getSession(), getResponse());
-                break;
-                
+                break;         
             case "/add/adding":
                 addCand(getRequest());
-                break;
-                
+                break; 
             default:
                 super.doGet(address);
         }
@@ -51,13 +55,48 @@ public class Authentication extends AbstractServlet{
         }
     }
     
-    private void addCand(HttpServletRequest request)  {
+
+
+    private void onSignOut(HttpSession session, HttpServletResponse response) throws IOException {
+        session.invalidate();
+        redirect(getHeader("Referer"));
+    }
+
+    private void index() throws ServletException, IOException {
+        forward("/login.html");
+    }
+
+    private void onSignIn(HttpServletRequest request, HttpSession session) throws ServletException, IOException {
+        
+        Calendar calendar = Calendar.getInstance();//TimeZone.getTimeZone("GMT+2:00")
+        int preCurrentMonth = calendar.get(Calendar.MONTH) + 1;
+        String currentMonth;
+        if (preCurrentMonth < 10) currentMonth = "0" + preCurrentMonth;
+        else currentMonth = String.valueOf(preCurrentMonth);
+                
+        request.getSession().setAttribute("dates", "2017-" + currentMonth + "-01");
+        request.getSession().setAttribute("times", "10:00");
+        request.getSession().setAttribute("branch", "СанктПетербург");
+        request.getSession().setAttribute("search", "false");
+        
+        Credentials credentials = new Credentials(request);
+        if (credentials.equals(new Credentials(MANAGER, PASS_MANAGER)) || 
+            credentials.equals(new Credentials(ADMIN, PASS_ADMIN))) {
+            session.setAttribute("role", credentials.getLogin());
+            session.setAttribute("isAuth", true);
+            redirect("/hr");
+        } else {
+            System.out.println(credentials.getLogin() + " " + credentials.getPassword());
+            forward("/error.html");
+        }
+    }
+    
+        private void addCand(HttpServletRequest request)  {
         String url = "jdbc:derby://localhost:1527/hrdb";
         String username = "root";
         String password = "bcenter";
-        String message;
         
-        String query = "insert into candidates(surname, name, patronymic, phonenumber, email, status, project, branch, dates, times, channel, advertising) values('" +
+        String query = "insert into candidates(surname, name, patronymic, phonenumber, email, status, project, branch, dates, times, channel, advertising, manager) values('" +
                       request.getParameter("surname") 
             + "','" + request.getParameter("name")
             + "','" + request.getParameter("patronymic")
@@ -69,18 +108,19 @@ public class Authentication extends AbstractServlet{
             + "','" + request.getSession().getAttribute("dates")
             + "','" + request.getSession().getAttribute("times")
             + "','" + request.getParameter("channel")
-            + "','" + request.getParameter("advertising") + "')";
+            + "','" + request.getParameter("advertising")
+            + "','" + request.getSession().getAttribute("role") + "')";
         System.out.println(query);
         
 
-        sslSender.send(
+        SENDER.send(
             "Приглашение на вебинар \"БизнесФон\"\n\n", "Добрый день, "
             + request.getParameter("name") 
             + " " 
             + request.getParameter("patronymic") + "!\nПриглашаем Вас на вебинар по проекту \""
             + request.getParameter("project") + "\", который начнётся " 
             + request.getSession().getAttribute("dates") + " в " 
-            + request.getSession().getAttribute("times") + ".\n\nС уважением, HR-менеджер \"БизнесФон\" Иванов Иван.", 
+            + request.getSession().getAttribute("times") + ".\n\nС уважением, HR-менеджер \"БизнесФон\".", 
             request.getParameter("email")
         );
         
@@ -108,36 +148,5 @@ public class Authentication extends AbstractServlet{
             System.out.println("CRASHED! " + e.getLocalizedMessage());
         }
     }
-
-    private void onSignOut(HttpSession session, HttpServletResponse response) throws IOException {
-        session.invalidate();
-        redirect(getHeader("Referer"));
-    }
-
-    private void index() throws ServletException, IOException {
-        forward("/login.html");
-    }
-
-    private void onSignIn(HttpServletRequest request, HttpSession session) throws ServletException, IOException {
-        
-        Calendar calendar = Calendar.getInstance();//TimeZone.getTimeZone("GMT+2:00")
-        int preCurrentMonth = calendar.get(Calendar.MONTH) + 1;
-        String currentMonth;
-        if (preCurrentMonth < 10) currentMonth = "0" + preCurrentMonth;
-        else currentMonth = String.valueOf(preCurrentMonth);
-                
-        request.getSession().setAttribute("dates", "2017-" + currentMonth + "-01");
-        request.getSession().setAttribute("times", "10:00");
-        request.getSession().setAttribute("branch", "СанктПетербург");
-        request.getSession().setAttribute("search", "false");
-        
-        Credentials credentials = new Credentials(request);
-        if (credentials.equals(new Credentials("manager", "biznesfon"))) {
-            session.setAttribute("isAuth", true);
-            redirect("/hr");
-        } else {
-            System.out.println(credentials.getLogin() + " " + credentials.getPassword());
-            forward("/error.html");
-        }
-    }
+    
 }

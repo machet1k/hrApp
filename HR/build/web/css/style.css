@@ -78,7 +78,7 @@ align_left {
 
 .stroke .wider {
     float: left; 
-    width: 155px; 
+    width: 175px; 
     height: 25px;
     text-align: center;
 }
@@ -118,7 +118,7 @@ hr {
 }
 
 .containerDownload {
-    width: 1400px;
+    width: 1580px;
     margin: 0 auto;
 }
 
@@ -127,10 +127,6 @@ hr {
     overflow: auto;
     /*background-color: rgba(255, 255, 255, 0.5);
 */}
-
-.containerDownload .panel-body {
-    height: 100%;
-}
 
 #date, #time {
     width: 260px;
@@ -172,7 +168,7 @@ body {
     position: absolute;
     width: 200px;
     top: 840px;
-    left:1680px;
+    left:1700px;
     opacity: 0.4;
 }
 
