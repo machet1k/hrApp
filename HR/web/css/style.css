@@ -94,7 +94,7 @@ hr {
 }
 
 .panel-body {
-    height: 815px;
+    height: 800px;
     overflow: auto;
     background-color: rgba(255, 255, 255, 0.5);
 }
@@ -134,7 +134,7 @@ body {
 }
 
 .branch {
-    margin: 6px 12px;
+    margin: 0 7px 0 0;
 }
 
 .sign {
@@ -142,5 +142,4 @@ body {
     text-align: center;
     color: #fff;
 }
-/* СТИЛИ ДЛЯ РАДИО */
 

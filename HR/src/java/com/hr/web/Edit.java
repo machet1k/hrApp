@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,12 +19,13 @@ public class Edit extends HttpServlet {
     String url = "jdbc:derby://localhost:1527/hrdb";
     String username = "root";
     String password = "bcenter";
+
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         String action = request.getParameter("action");
-        String candidate_number = (String) request.getSession(false).getAttribute("number");
+        String candidate_number = (String) request.getSession().getAttribute("number");
 
         switch (action) {
             
@@ -51,6 +53,8 @@ public class Edit extends HttpServlet {
                         + "', patronymic = '" + request.getParameter("patronymic")
                         + "', project = '" + request.getParameter("project")
                         + "', status = '" + request.getParameter("status")
+                        + "', dates = '" + request.getParameter("dates")
+                        + "', times = '" + request.getParameter("times")
                         + "', branch = '" + request.getParameter("branch") + "' where phonenumber = '" + candidate_number + "'";
                 System.out.println(query);
                 try {

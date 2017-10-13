@@ -17,10 +17,6 @@ import javax.servlet.http.HttpSession;
 @WebServlet({"/sign-in", "/sign-out", "/add/adding"})
 public class Authentication extends AbstractServlet{
 
-    public static String dates = "2017-07-01";
-    public static String times = "10:00";
-    public static String branch = "Санкт-Петербург";
-
     @Override
     protected void doGet(String address) throws ServletException, IOException {
         switch(address) {
@@ -55,6 +51,7 @@ public class Authentication extends AbstractServlet{
         String url = "jdbc:derby://localhost:1527/hrdb";
         String username = "root";
         String password = "bcenter";
+  
         String query = "insert into candidates(surname, name, patronymic, phonenumber, status, project, branch, dates, times) values('" +
                 request.getParameter("surname") + "','" +
                 request.getParameter("name") + "','" +
@@ -62,9 +59,10 @@ public class Authentication extends AbstractServlet{
                 request.getParameter("phonenumber") + "','" +
                 request.getParameter("status") + "','" +
                 request.getParameter("project") + "','" +
-                branch + "','" +
-                dates + "','" +
-                times + "')";
+                request.getSession().getAttribute("branch") + "','" +
+                request.getSession().getAttribute("dates") + "','" +
+                request.getSession().getAttribute("times") + "')";
+        System.out.println(query);
         try {
             redirect("/hr");
             Connection connection = DriverManager.getConnection(url, username, password);
@@ -72,7 +70,7 @@ public class Authentication extends AbstractServlet{
             statement.executeUpdate(query);
             System.out.println(query);
         } catch (IOException | SQLException  e){
-            System.out.println("CRASHED! " + e.getLocalizedMessage() +"\n"+ e.getMessage());
+            System.out.println("CRASHED! " + e.getLocalizedMessage());
         }
     }
 
@@ -86,6 +84,11 @@ public class Authentication extends AbstractServlet{
     }
 
     private void onSignIn(HttpServletRequest request, HttpSession session) throws ServletException, IOException {
+        
+        request.getSession().setAttribute("dates", "2017-07-01");
+        request.getSession().setAttribute("times", "10:00");
+        request.getSession().setAttribute("branch", "Санкт-Петербург");
+        
         Credentials credentials = new Credentials(request);
         if (credentials.equals(new Credentials("root", "root"))) {
             session.setAttribute("isAuth", true);

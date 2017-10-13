@@ -14,14 +14,15 @@ public class Add extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        Authentication.dates = request.getParameter("dates");
-        Authentication.times = request.getParameter("times");
+
+        request.getSession().setAttribute("dates", request.getParameter("dates"));
+        request.getSession().setAttribute("times", request.getParameter("times"));
         
         if ("Add".equals(action)) {     
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/pages/addCandidate.html");
             dispatcher.forward(request, response);
         } else if ("SetBranch".equals(action)) {
-            Authentication.branch = request.getParameter("branch");
+            request.getSession().setAttribute("branch", request.getParameter("branch"));
             response.sendRedirect("/hr"); 
         } else {
             response.sendRedirect("/hr");
