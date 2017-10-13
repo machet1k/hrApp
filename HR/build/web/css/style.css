@@ -28,6 +28,7 @@ label {
     cursor: pointer;
     padding: 2px 5px 2px 2px;
     border-radius: 10px;
+    font-weight: 100;
 }
 
 input[type=radio] {
@@ -64,16 +65,31 @@ align_left {
     font: 800 120px Tahoma;
 }
 
-.stroke  {
+.stroke {
     float: left; 
 }
 
-.stroke div {
+.stroke .normal {
     float: left; 
-    width: 99px; 
+    width: 115px; 
     height: 25px;
     text-align: center;
 }
+
+.stroke .wider {
+    float: left; 
+    width: 155px; 
+    height: 25px;
+    text-align: center;
+}
+
+.stroken div {
+    float: left; 
+    width: 127px; 
+    height: 25px;
+    text-align: center;
+}
+
 .header {
     font-weight: 900;
     font-size: 16px;
@@ -92,32 +108,46 @@ hr {
 }
 
 .containerIndex {
-    width: 1200px;
+    width: 1480px;
     margin: 0 auto;
 }
 
 .containerEdit {
-    width: 720px;
+    width: 740px;
     margin: 0 auto;
 }
 
-.panel-body {
+.containerDownload {
+    width: 1400px;
+    margin: 0 auto;
+}
+
+.containerIndex .panel-body {
     height: 720px;
     overflow: auto;
-    background-color: rgba(255, 255, 255, 0.5);
+    /*background-color: rgba(255, 255, 255, 0.5);
+*/}
+
+.containerDownload .panel-body {
+    height: 100%;
 }
 
 #date, #time {
     width: 260px;
     float: left;
-    padding: 10px;
+    padding: 7px;
 }
 
 #candidates {
-    width: 680px;
+    width: 940px;
     float: left;
-    padding: 10px;
+    padding: 7px;
 }
+
+#download div {
+    display: inline-block;
+}
+
 
 #buffer,#edit,#statusdate {
     width: 240px;
@@ -141,7 +171,7 @@ body {
 .logimg {
     position: absolute;
     width: 200px;
-    top: 800px;
+    top: 840px;
     left:1680px;
     opacity: 0.4;
 }
@@ -159,6 +189,11 @@ body {
     margin: 0 auto;
     text-align: center;
     color: #fff;
+    margin: 15px 0 0 0;
+}
+.sign:hover {
+    color: #ffdbb3;
+    cursor: pointer;
 }
 
 .phonenumber {
@@ -169,14 +204,27 @@ body {
 }
 
 .searchbtn {
-    margin-top: 20px;
+    margin: 20px 20px 0 7px;
 }
 
-.citybtn {
-    margin-right: 10px;
+.downloadbtn {
+    margin-top: 15px;
+    margin-right: 20px;
 }
 
 .row {
     margin: 0;
+}
+
+.choose {
+    margin-right: 30px;
+}
+
+.badge {
+    margin-left: 4px;
+}
+
+.fill {
+    background-color: #337ab7;
 }
 

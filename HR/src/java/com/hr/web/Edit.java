@@ -1,20 +1,19 @@
 package com.hr.web;
 
+import com.hr.core.AbstractServlet;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/Edit")
-public class Edit extends HttpServlet {
+public class Edit extends AbstractServlet {
     
     String url = "jdbc:derby://localhost:1527/hrdb";
     String username = "root";
@@ -26,7 +25,6 @@ public class Edit extends HttpServlet {
         String action = request.getParameter("action");
         String phonenumber = request.getParameter("candidate");
         String candidateNumber = (String) request.getSession().getAttribute("number");
-        String candidateStatus = (String) request.getSession().getAttribute("status");
         String queryStatus = "";
         
         switch (action) {
@@ -47,8 +45,7 @@ public class Edit extends HttpServlet {
             break;
             
             case "Edit":
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/pages/editCandidate.jsp");
-                dispatcher.forward(request, response);
+                forward("/editCandidate.jsp");
             break;
                 
             case "Editing":
@@ -59,14 +56,17 @@ public class Edit extends HttpServlet {
                         + "', status = '" + request.getParameter("status")
                         + "', dates = '" + request.getParameter("dates")
                         + "', times = '" + request.getParameter("times")
+                        + "', channel = '" + request.getParameter("channel")
+                        + "', advertising = '" + request.getParameter("advertising")
                         + "', branch = '" + request.getParameter("branch") + "' where phonenumber = '" + candidateNumber + "'";
-                System.out.println(query);
+                System.out.println("query: " + query);
                 
                 long currentTimeMillis = System.currentTimeMillis(); 
-                String currentDate = new SimpleDateFormat("dd.MM.yyyy").format(currentTimeMillis); 
+
                 String currentDateBD = new SimpleDateFormat("yyyy-MM-dd").format(currentTimeMillis); 
                 String currentTime = new SimpleDateFormat("HH:mm").format(currentTimeMillis); 
-                System.out.println(currentTimeMillis + " " + currentDate + " " + currentDateBD + " " + currentTime);
+                
+                System.out.println("EDIT  " + request.getParameter("status") + " " + request.getSession().getAttribute("status"));    
                 
                 if (!request.getParameter("status").equals(request.getSession().getAttribute("status"))) {
                     queryStatus = "insert into statuses(phonenumber, status, dates, times) values('" +
@@ -74,17 +74,17 @@ public class Edit extends HttpServlet {
                     request.getParameter("status") + "','" +
                     currentDateBD + "','" +
                     currentTime + "')";
-                    System.out.println(queryStatus);
+                    System.out.println("queryStatus: " + queryStatus);
                 }
                 
                 try {
-                    response.sendRedirect("/hr");
+                    redirect("/hr");
                     Connection connection = DriverManager.getConnection(url, username, password);
                     Statement statement = connection.createStatement();
                     statement.executeUpdate(query);
                     statement.executeUpdate(queryStatus);
                 } catch (IOException | SQLException  e){
-                    System.out.println("CRASHED! " + e.getLocalizedMessage() +"\n"+ e.getMessage());
+                    System.out.println("CRASHED in Edit! " + e.getLocalizedMessage());
                 }   
             break;
                 

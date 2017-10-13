@@ -41,26 +41,35 @@
             String query;
             ResultSet rs = null;
 
-            String dates, times, branch;
+            String dates = "", times = "", branch = "";
 
             if (session.getAttribute("search").equals("true")) {
-                dates = String.valueOf(session.getAttribute("dateSearch"));
-                times = String.valueOf(session.getAttribute("timeSearch"));
-                branch = String.valueOf(session.getAttribute("branchSearch"));
+                if (session.getAttribute("dateSearch")   != null && 
+                    session.getAttribute("timeSearch")   != null && 
+                    session.getAttribute("branchSearch") != null) {
+                    dates = String.valueOf(session.getAttribute("dateSearch"));
+                    times = String.valueOf(session.getAttribute("timeSearch"));
+                    branch = String.valueOf(session.getAttribute("branchSearch"));
+                } else {
+                    out.print("<script type='text/javascript'>alert('Кандидата с данным номером нет в Базе Данных.');</script>");
+                    dates = String.valueOf(session.getAttribute("dates"));
+                    times = String.valueOf(session.getAttribute("times"));
+                    branch = String.valueOf(session.getAttribute("branch"));
+                }
             } else {
                 dates = String.valueOf(session.getAttribute("dates"));
                 times = String.valueOf(session.getAttribute("times"));
-                branch = String.valueOf(session.getAttribute("branch"));
+                branch = String.valueOf(session.getAttribute("branch"));               
             }
-
         %>
-        <script type="text/javascript"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css">
+
     </head>
 
     <body>
+        
         <a href="/hr/sign-out" class="pull-right btn btn-link">Выход</a>
-        <a href="http://biznesfon.ru"><img class="logimg" src="http://savepic.ru/14679379.png" alt="logotype"></a>
+        <a href="http://biznesfon.ru"><img class="logimg" src="https://pp.userapi.com/c837636/v837636687/526af/LMmzKvJQDdM.jpg" alt="logotype"></a>
         
         <div class="containerIndex">
             <div class="row">
@@ -68,21 +77,21 @@
                     <div class="pull-right"> 
                         <input required class="phonenumber" type="text" name="phonenumber" placeholder="9115557799" pattern="[9]{1}[0-9]{9}">
                         <button class="pull-right btn btn-link searchbtn" type="submit" name="action" value="SetBranch" >Поиск</button>
-                        
                     </div>
                 </form>
 
                 <form action="Add" method="Post">
                     <div class="align_right">
                         
-                        <button type="submit" name="action" value="SetBranch" class="pull-right btn btn-link citybtn">&#10003;</button>
-                        <% out.print("<select data-width='180px' class='gap-bottom branch selectpicker show-tick' name='branch' required>"
+                        <button type="submit" name="action" value="SetBranch" class="pull-right btn btn-link choose">Выбрать</button>
+                        <% out.print("<select data-width='175px' class='gap-bottom branch selectpicker show-tick' name='branch' required>"
                                     + "<option selected>" + branch + "</option>"
-                                    + "<option>Санкт-Петербург</option>"
+                                    + "<option value='СанктПетербург'>Санкт-Петербург</option>"
                                     + "<option>Димитровград</option>"
                                     + "<option>Рефтинский</option>"
                                     + "<option>Асбест</option>"
-                                    + "<option>Челябинск</option></select>");
+                                    + "<option>Челябинск</option>"
+                                    + "<option value='ДО'>Домашний Оператор</option></select>");
                         %>
                     </div>
                     <h3><span>Human Resourse App:</span> Набор персонала БизнесФон.</h3>
@@ -132,10 +141,12 @@
                                             if (("2017-0" + month + "-" + prepareDay).equals(dates)) {
                                                 checked = "checked";
                                             }
+                                            String fill = "";
+                                            if (!rs.getString(1).equals("0")) fill = "fill";
                                             out.print("<li><label><input onClick='this.form.submit()' "
                                                     + checked + " required type='radio' name='dates' value='2017-0"
                                                     + month + "-" + prepareDay + "'>"
-                                                    + prepareDay + ".0" + month + ".2017</label><span class='badge'>" + rs.getString(1) + "</span></li>");
+                                                    + prepareDay + ".0" + month + ".2017</label><span class='badge " + fill + "'>" + rs.getString(1) + "</span></li>");
                                         }
                                         out.print("</ul>");
                                     }
@@ -180,9 +191,11 @@
                                                 checked = "checked";
                                             }
 
+                                            String fill = "";
+                                            if (!rs.getString(1).equals("0")) fill = "fill";
                                             out.print("<li><label><input onClick='this.form.submit()' "
                                                     + checked + " required type='radio' name='times' value='" + hoursFrom + minutesFrom + "'>"
-                                                    + hoursFrom + minutesFrom + " – " + hoursTo + minutesTo + "</label><span class='badge'>"
+                                                    + hoursFrom + minutesFrom + " – " + hoursTo + minutesTo + "</label><span class='badge " + fill + "'>"
                                                     + rs.getString(1) + "</span></li>");
                                         }
                                     }
@@ -201,16 +214,17 @@
                                     out.print(displayDate + " к " + times.substring(0, 5));
                                 %>
                                 <button type="submit" name="action" value="Delete" class="pull-right btn btn-danger">Удалить</button>
-                                <button type="submit" name="action" value="Edit" class="pull-right btn btn-warning">Ред.</button>
+                                <button type="submit" name="action" value="Edit" class="pull-right btn btn-warning">Изменить</button>
                             </div>
                             <div class="panel-body">
                                 <div class='stroke header'>
-                                    <div>Фамилия</div>
-                                    <div>Имя</div>
-                                    <div>Отчество</div>
-                                    <div>Телефон</div>
-                                    <div>Статус</div>
-                                    <div>Проект</div>
+                                    <div class="normal">Фамилия</div>
+                                    <div class="normal">Имя</div>
+                                    <div class="normal">Отчество</div>
+                                    <div class="normal">Телефон</div>
+                                    <div class="wider">e-mail</div>
+                                    <div class="normal">Проект</div>
+                                    <div class="normal">Статус</div>
                                 </div>
                                 <hr>
                                 <%
@@ -224,24 +238,108 @@
 
                                     while (rs.next()) {
                                         out.print("<label><input required type='radio' name='candidate' value='" + rs.getString(5) + "'><div class='stroke'>"
-                                                + "<div>" + rs.getString(2) + "</div>"
-                                                + "<div>" + rs.getString(3) + "</div>"
-                                                + "<div>" + rs.getString(4) + "</div>"
-                                                + "<div>" + rs.getString(5) + "</div>"
-                                                + "<div>" + rs.getString(6) + "</div>"
-                                                + "<div>" + rs.getString(7) + "</div></div></label>");
+                                                + "<div class='normal'>" + rs.getString(2) + "</div>"
+                                                + "<div class='normal'>" + rs.getString(3) + "</div>"
+                                                + "<div class='normal'>" + rs.getString(4) + "</div>"
+                                                + "<div class='normal'>" + rs.getString(5) + "</div>"
+                                                + "<div class='wider'>"  + rs.getString(6) + "</div>"
+                                                + "<div class='normal'>" + rs.getString(8) + "</div>"
+                                                + "<div class='normal'>" + rs.getString(7) + "</div></div></label>");
                                     }
                                     request.getSession().setAttribute("search", "false");
+                                    request.getSession().setAttribute("dateSearch", null);
+                                    request.getSession().setAttribute("timeSearch", null);
+                                    request.getSession().setAttribute("branchSearch", null);
                                 %>
                                 <hr>
                             </div>
                         </div>
                     </div>
                 </form>
+                
+                <form action="Download" method="Post">
+                    <div id="download">
+                        
+                        <div>Выставите параметры:</div>
+                        <div><select class="gap-bottom" name="branch">
+                            <option selected disabled value=''>Площадка</option>
+                            <option value="СанктПетербург">Санкт-Петербург</option>
+                            <option>Димитровград</option>
+                            <option>Рефтинский</option>
+                            <option>Асбест</option>
+                            <option>Челябинск</option>
+                            <option value='ДО'>Домашний оператор</option>
+                        </select></div>
+
+                        <div>c</div>
+                        <div><input type="date" name="from" required></div>
+                        <div>по</div>
+                        <div><input type="date" name="to" required></div>
+
+                        <div><select class="gap-bottom" name="status">
+                            <option selected disabled value=''>Статус</option>
+                            <option>собеседование</option>
+                            <option>обучение</option>
+                            <option>принят</option>
+                            <option>отказ</option>
+                            <option>неявка</option>
+                        </select></div>
+
+                        <div><select class="gap-bottom" name="project">
+                            <option selected disabled value=''>Проект</option>
+                            <option>Грузовичкоф</option>
+                            <option>Таксовичкоф</option>
+                            <option>Достаевский</option>
+                            <option>Кисточки</option>
+                        </select></div>
+
+                        <div><select class="gap-bottom" name="channel">
+                            <option selected disabled value=''>Канал связи</option>
+                            <option title="Исходящий(отклик)">Исх.отклик</option>
+                            <option title="Исходящий(холодный звонок)">Исх.хол.зв.</option>
+                            <option title="Входящий">Входящий</option>
+                        </select></div>
+
+                        <div><select class="gap-bottom" name="advertising">
+                            <option selected disabled value=''>Рекламный источник</option>
+                            <option>HeadHunter</option>
+                            <option>SuperJob</option>
+                            <option>Avito</option>
+                            <option>gruzovichkof.ru</option>
+                            <option>taxovichkof.ru</option>
+                            <option>biznesfon.ru</option>
+                            <option>Яндекс.Работа</option>
+                            <option>Rabota.ru</option>
+                            <option>Не помнят</option>
+                            <option>Знакомые</option>
+                            <option>trisosny.ru</option>
+                            <option>25kanal.ru</option>
+                            <option>dimitrovgradros.flagma.ru</option>
+                            <option>maxz.ru</option>
+                            <option>asbest-gid.ru</option>
+                            <option>asbest.name</option>
+                            <option>asbet.ru</option>
+                            <option>asbest-online.ru</option>
+                            <option>reftinskiy.ru</option>
+                            <option>reftnews.ru</option>
+                            <option>74.ru</option>
+                            <option>chel.barahla.net</option>
+                            <option>ubu.ru/chelyabinsk</option>
+                            <option>chelyabinsk.gde.ru</option>
+                            <option>chelyabinsk.dorus.ru</option>
+                            <option>chelyabinsk.bestru.ru</option>
+                            <option>chelyabinsk.sopta.ru</option>
+                        </select></div>
+
+                        <div class="downloadbtn">
+                        <button type="submit" class="btn btn-primary">Выгрузить</button>
+                        </div>
+                    </div> 
+                </form>
             </div>
             <div class="sign"> 
                 &copy; This application has been created by Roman Kharitonov. All rights reserved.
-            </div>
+            </div> 
         </div> 
     </body>
 </html>

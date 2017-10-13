@@ -25,9 +25,32 @@
         <link href="css/groundwork.css" type="text/css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <link rel="icon" type="image/x-icon" href="http://savepic.ru/14659608.png"/>
+        
+        <script>
+            var СанктПетербург = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят');
+            var Димитровград = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','trisosny.ru','25kanal.ru','dimitrovgradros.flagma.ru');
+            var Асбест = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','maxz.ru','asbest-gid.ru','asbest.name','asbet.ru','asbest-online.ru');
+            var Рефтинский = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','reftinskiy.ru','reftnews.ru');
+            var Челябинск = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят','74.ru','chel.barahla.net','ubu.ru/chelyabinsk','chelyabinsk.gde.ru','chelyabinsk.dorus.ru','chelyabinsk.bestru.ru','chelyabinsk.sopta.ru');
+            var ДО = Array('HeadHunter','SuperJob','Avito','gruzovichkof.ru','taxovichkof.ru','biznesfon.ru','Яндекс.Работа','Rabota.ru','Знакомые','Не помнят');
+            
+            function showAdv(v) {
+                var mas = eval(v);
+                var el = document.getElementById('adv');
+                while (el.childNodes.length > 0) {
+                    el.removeChild(el.childNodes[el.childNodes.length - 1]);
+                }
+                for (var i = 0; i < mas.length; i++) {
+                    var opt = document.createElement("option");
+                    opt.innerHTML = mas[i];
+                    el.appendChild(opt);
+                }
+            }
+        </script>
+        
     </head>
-    <body>
-        <a href="http://biznesfon.ru"><img class="logimg" src="http://savepic.ru/14679379.png" alt="logotype"></a>
+    <body onload="showAdv('СанктПетербург')">
+        <a href="http://biznesfon.ru"><img class="logimg" src="https://pp.userapi.com/c837636/v837636687/526af/LMmzKvJQDdM.jpg" alt="logotype"></a>
         <div class="containerEdit">
             <div class="headertext">Редактирование данных кандидата:</div>
             <div id="buffer"></div>
@@ -73,37 +96,50 @@
                         rs = statement.executeQuery(query);
                         rs.next();
 
-                        session.setAttribute("status", rs.getString(6));
+                        session.setAttribute("status", rs.getString(7));
 
                         out.print("<input required class='gap-bottom' type='text' name='surname' placeholder='Фамилия' value='" + rs.getString(2) + "'>");
                         out.print("<input required class='gap-bottom' type='text' name='name' placeholder='Имя' value='" + rs.getString(3) + "'>");
                         out.print("<input required class='gap-bottom' type='text' name='patronymic' placeholder='Отчество' value='" + rs.getString(4) + "'>");
-                        out.print("<input required class='gap-bottom' type='text' name='phonenumber' placeholder='9115557799' value='"
-                                + candidateNumber + "'aria-required='true' pattern='[9]{1}[0-9]{9}' readonly>");
+                        out.print("<input required class='gap-bottom' type='text' name='phonenumber' value='"
+                                + rs.getString(5) + "'aria-required='true' pattern='[9]{1}[0-9]{9}' readonly>");
+                         out.print("<input required class='gap-bottom' type='text' name='email' value='"
+                                + rs.getString(6) + "'aria-required='true'>");
+                        // Статус
                         out.print("<select class='gap-bottom' required name='status'>"
-                                + "<option selected >" + rs.getString(6) + "</option>"
+                                + "<option selected >" + rs.getString(7) + "</option>"
                                 + "<option>собеседование</option><option>обучение</option>"
                                 + "<option>принят</option>"
                                 + "<option>отказ</option>"
                                 + "<option>неявка</option></select>");
+                        // Проект
                         out.print("<select class='gap-bottom' name='project' required>"
-                                + "<option selected>" + rs.getString(7) + "</option>"
+                                + "<option selected>" + rs.getString(8) + "</option>"
                                 + "<option>Грузовичкоф</option>"
                                 + "<option>Таксовичкоф</option>"
                                 + "<option>Достаевский</option>"
                                 + "<option>Кисточки</option></select>");
-                        out.print("<select class='gap-bottom' name='branch' required>"
-                                + "<option selected>" + rs.getString(10) + "</option>"
-                                + "<option>Санкт-Петербург</option>"
-                                + "<option>Димитровград</option>"
-                                + "<option>Рефтинский</option>"
-                                + "<option>Асбест</option>"
-                                + "<option>Челябинск</option></select>");
+                        // Регион
+                        out.print("<select class='gap-bottom' name='branch' required onchange='showAdv(this.value)'>"
+                                + "<option value='СанктПетербург'>Санкт-Петербург</option>"
+                                + "<option value='Димитровград'>Димитровград</option>"
+                                + "<option value='Рефтинский'>Рефтинский</option>"
+                                + "<option value='Асбест'>Асбест</option>"
+                                + "<option value='Челябинск'>Челябинск</option>"
+                                + "<option value='ДО'>Домашний оператор</option></select>");
+                        // Канал связи
+                        out.print("<select class='gap-bottom' name='channel' required>"
+                                + "<option selected>" + rs.getString(12) + "</option>"
+                                + "<option title='Исходящий (отклик)'>Исх.отклик</option>"
+                                + "<option title='Исходящий (холодный звонок)'>Исх.хол.зв.</option>"
+                                + "<option title='Входящий'>Входящий</option></select>");
 
+                        // Рекламный источник
+                        out.print("<select class='gap-bottom' name='advertising' required id='adv'>"
+                                + "<option selected>" + rs.getString(13) + "</option></select>");
+                        
                         out.print("<select class='gap-bottom' name='dates' required>");
-
                         String currentDate = String.valueOf(request.getSession().getAttribute("dates"));
-
                         for (int month = currentMonth + 1; month < currentMonth + 3; month++) {
 
                             calendar.set(2017, month - 1, 1);
