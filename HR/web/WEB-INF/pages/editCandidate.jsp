@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.util.ArrayList"%>
@@ -29,11 +30,10 @@
         <a href="http://biznesfon.ru" target="_blank">
             <img class="logimg" src="http://savepic.ru/14679379.png" alt="logotype">
         </a>
-        <div class="fadeInDownBig">
+        <div class="container40">
             <div class="align_center">Редактирование данных кандидата:</div>
-            <div class="one sevenths centered triple-padded">    
+            <div id="edit">
                 <form action="Edit" method="Post">
-
                     <%
                         String url = "jdbc:derby://localhost:1527/hrdb";
                         String username = "root";
@@ -63,22 +63,24 @@
                         months.add("Ноябрь");
                         months.add("Декабрь");
 
-                        String candidate_number = request.getParameter("candidate");
-                        session.setAttribute("number", candidate_number);
+                        String candidateNumber = request.getParameter("candidate");
+                        session.setAttribute("number", candidateNumber);
 
-                        query = "SELECT * FROM candidates where phonenumber = '" + candidate_number + "'";
+                        query = "SELECT * FROM candidates where phonenumber = '" + candidateNumber + "'";
                         System.out.println(query);
-                        
+
                         connection = DriverManager.getConnection(url, username, password);
                         statement = connection.createStatement();
                         rs = statement.executeQuery(query);
                         rs.next();
 
+                        session.setAttribute("status", rs.getString(6));
+
                         out.print("<input required class='gap-bottom' type='text' name='surname' placeholder='Фамилия' value='" + rs.getString(2) + "'>");
                         out.print("<input required class='gap-bottom' type='text' name='name' placeholder='Имя' value='" + rs.getString(3) + "'>");
                         out.print("<input required class='gap-bottom' type='text' name='patronymic' placeholder='Отчество' value='" + rs.getString(4) + "'>");
                         out.print("<input required class='gap-bottom' type='text' name='phonenumber' placeholder='9115557799' value='"
-                                + candidate_number + "'aria-required='true' pattern='[9]{1}[0-9]{9}' readonly>");
+                                + candidateNumber + "'aria-required='true' pattern='[9]{1}[0-9]{9}' readonly>");
                         out.print("<select class='gap-bottom' required name='status'>"
                                 + "<option selected >" + rs.getString(6) + "</option>"
                                 + "<option>собеседование</option><option>обучение</option>"
@@ -98,11 +100,11 @@
                                 + "<option>Рефтинский</option>"
                                 + "<option>Асбест</option>"
                                 + "<option>Челябинск</option></select>");
-                        
+
                         out.print("<select class='gap-bottom' name='dates' required>");
-                        
+
                         String currentDate = String.valueOf(request.getSession().getAttribute("dates"));
-                        
+
                         for (int month = currentMonth + 1; month < currentMonth + 3; month++) {
 
                             calendar.set(2017, month - 1, 1);
@@ -125,9 +127,9 @@
                         }
                         out.print("</select>");                            
                         out.print("<select class='gap-bottom' name='times' required>");
-                        
+
                         String currentTime = String.valueOf(request.getSession().getAttribute("times"));
-                        
+
                         for (int hoursFrom = 10; hoursFrom < 19; hoursFrom++) {
                             for (int j = 0; j < 2; j++) {
                                 String minutesFrom;
@@ -159,7 +161,18 @@
                 </form>    
                 <form action="/hr">
                     <button class="pull-right btn-danger">Отмена</button>
-                </form>  
+                </form> 
+            </div>
+            <div id="statusdate">
+            <%    
+                String queryStatus = "select status, dates, times from statuses where phonenumber = '" + candidateNumber + "'";
+                rs = statement.executeQuery(queryStatus);
+                while(rs.next()){
+                    date = LocalDate.parse(String.valueOf(rs.getString(2)), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    displayDate = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
+                    out.print("<span>" + displayDate + "</span><span>" + rs.getString(3) + "</span><span>" + rs.getString(1) + "</span><br>");
+                }
+            %> 
             </div>
         </div>
     </body>

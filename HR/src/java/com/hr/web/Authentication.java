@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +53,7 @@ public class Authentication extends AbstractServlet{
         String url = "jdbc:derby://localhost:1527/hrdb";
         String username = "root";
         String password = "bcenter";
-  
+        
         String query = "insert into candidates(surname, name, patronymic, phonenumber, status, project, branch, dates, times) values('" +
                 request.getParameter("surname") + "','" +
                 request.getParameter("name") + "','" +
@@ -63,11 +65,25 @@ public class Authentication extends AbstractServlet{
                 request.getSession().getAttribute("dates") + "','" +
                 request.getSession().getAttribute("times") + "')";
         System.out.println(query);
+        
+        long currentTimeMillis = System.currentTimeMillis(); 
+        String currentDate = new SimpleDateFormat("dd.MM.yyyy").format(currentTimeMillis); 
+        String currentDateBD = new SimpleDateFormat("yyyy-MM-dd").format(currentTimeMillis); 
+        String currentTime = new SimpleDateFormat("HH:mm").format(currentTimeMillis); 
+        System.out.println(currentTimeMillis + " " + currentDate + " " + currentDateBD + " " + currentTime);
+
+        String queryStatus = "insert into statuses(phonenumber, status, dates, times) values('" +
+                request.getParameter("phonenumber") + "','" +
+                request.getParameter("status") + "','" +
+                currentDateBD + "','" +
+                currentTime + "')";
+        System.out.println(queryStatus);
         try {
             redirect("/hr");
             Connection connection = DriverManager.getConnection(url, username, password);
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);
+            statement.executeUpdate(queryStatus);
             System.out.println(query);
         } catch (IOException | SQLException  e){
             System.out.println("CRASHED! " + e.getLocalizedMessage());

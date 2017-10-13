@@ -93,6 +93,11 @@ hr {
     margin: 0 auto;
 }
 
+.container40 {
+    width: 580px;
+    margin: 0 auto;
+}
+
 .panel-body {
     height: 800px;
     overflow: auto;
@@ -109,6 +114,21 @@ hr {
     width: 680px;
     float: left;
     padding: 10px;
+}
+
+#edit {
+    width: 280px;
+    float: left;
+    padding: 10px;
+}
+#statusdate {
+    width: 240px;
+    float: left;
+    padding: 10px;
+}
+
+#statusdate span{
+    padding: 5px;
 }
 
 body {
@@ -142,4 +162,5 @@ body {
     text-align: center;
     color: #fff;
 }
+
 
