@@ -8,7 +8,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -104,9 +103,10 @@ public class Authentication extends AbstractServlet{
         request.getSession().setAttribute("dates", "2017-07-01");
         request.getSession().setAttribute("times", "10:00");
         request.getSession().setAttribute("branch", "Санкт-Петербург");
+        request.getSession().setAttribute("search", "false");
         
         Credentials credentials = new Credentials(request);
-        if (credentials.equals(new Credentials("root", "root"))) {
+        if (credentials.equals(new Credentials("manager", "biznesfon"))) {
             session.setAttribute("isAuth", true);
             redirect("/hr");
         } else {

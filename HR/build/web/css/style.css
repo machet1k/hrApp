@@ -43,10 +43,14 @@ input[type=radio] {
     font-size: 1.5em;
 }
 
-.align_center {
-    margin-top: 30px;
+.headertext {
+    margin: 10px;
     text-align: center;
     font: 20pt monospace;
+}
+
+align_left {
+    float: left;
 }
 
 .align_right {
@@ -85,21 +89,20 @@ hr {
 
 #month {
     font-size: 16px;
-
 }
 
-.container80 {
-    width: 1170px;
+.containerIndex {
+    width: 1200px;
     margin: 0 auto;
 }
 
-.container40 {
-    width: 580px;
+.containerEdit {
+    width: 720px;
     margin: 0 auto;
 }
 
 .panel-body {
-    height: 800px;
+    height: 720px;
     overflow: auto;
     background-color: rgba(255, 255, 255, 0.5);
 }
@@ -116,12 +119,7 @@ hr {
     padding: 10px;
 }
 
-#edit {
-    width: 280px;
-    float: left;
-    padding: 10px;
-}
-#statusdate {
+#buffer,#edit,#statusdate {
     width: 240px;
     float: left;
     padding: 10px;
@@ -143,7 +141,7 @@ body {
 .logimg {
     position: absolute;
     width: 200px;
-    top: 820px;
+    top: 800px;
     left:1680px;
     opacity: 0.4;
 }
@@ -163,4 +161,22 @@ body {
     color: #fff;
 }
 
+.phonenumber {
+    width: 150px;
+    float: left;
+    margin-top: 20px;
+    padding-right: 5px;
+}
+
+.searchbtn {
+    margin-top: 20px;
+}
+
+.citybtn {
+    margin-right: 10px;
+}
+
+.row {
+    margin: 0;
+}
 

@@ -27,11 +27,10 @@
         <link rel="icon" type="image/x-icon" href="http://savepic.ru/14659608.png"/>
     </head>
     <body>
-        <a href="http://biznesfon.ru" target="_blank">
-            <img class="logimg" src="http://savepic.ru/14679379.png" alt="logotype">
-        </a>
-        <div class="container40">
-            <div class="align_center">Редактирование данных кандидата:</div>
+        <a href="http://biznesfon.ru"><img class="logimg" src="http://savepic.ru/14679379.png" alt="logotype"></a>
+        <div class="containerEdit">
+            <div class="headertext">Редактирование данных кандидата:</div>
+            <div id="buffer"></div>
             <div id="edit">
                 <form action="Edit" method="Post">
                     <%

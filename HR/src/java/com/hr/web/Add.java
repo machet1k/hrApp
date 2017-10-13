@@ -1,15 +1,14 @@
 package com.hr.web;
 
+import com.hr.core.AbstractServlet;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/Add")
-public class Add extends HttpServlet {
+public class Add extends AbstractServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -19,13 +18,12 @@ public class Add extends HttpServlet {
         request.getSession().setAttribute("times", request.getParameter("times"));
         
         if ("Add".equals(action)) {     
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/pages/addCandidate.html");
-            dispatcher.forward(request, response);
+            forward("/addCandidate.html");
         } else if ("SetBranch".equals(action)) {
             request.getSession().setAttribute("branch", request.getParameter("branch"));
-            response.sendRedirect("/hr"); 
+            redirect("/hr"); 
         } else {
-            response.sendRedirect("/hr");
+            redirect("/hr");
         }
     }   
 }
