@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/Edit")
 public class Edit extends AbstractServlet {
     
-    private static final com.hr.helpers.Sender sender = new com.hr.helpers.Sender("neutrinoteammachet1k@gmail.com", "decbblec0olP");
+    private static final com.hr.helpers.Sender SENDER = new com.hr.helpers.Sender("neutrinoteammachet1k@gmail.com", "decbblec0olP");
     
     String url = "jdbc:derby://localhost:1527/hrdb";
     String username = "root";
@@ -25,22 +25,26 @@ public class Edit extends AbstractServlet {
         
         String action = request.getParameter("action");
         String phonenumber = request.getParameter("candidate");
-        String candidateNumber = (String) request.getSession().getAttribute("number");
-        String queryStatus = "";
+        String candidateNumber = String.valueOf(request.getSession().getAttribute("number"));
         
-        
+        String surname;
+        String name;
+        String patronymic;
+        String email;
+        String status = request.getParameter("status");
+        String changedStatus = request.getParameter("changedStatus");
+        String reason = request.getParameter("reason");
+        String query;
 
         switch (action) {
 
             case "Delete":
-                String query = "delete from candidates where phonenumber = '" + phonenumber + "'";
-                queryStatus = "delete from statuses where phonenumber = '" + phonenumber + "'";
+                query = "delete from candidates where phonenumber = '" + phonenumber + "'";
                 System.out.println("Edit.java > QUERY: " + query);
                 try(Connection connection = DriverManager.getConnection(url, username, password);
                     Statement statement = connection.createStatement()) {
                     response.sendRedirect(request.getHeader("Referer"));              
-                    statement.executeUpdate(query);
-                    statement.executeUpdate(queryStatus);   
+                    statement.executeUpdate(query); 
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -52,11 +56,11 @@ public class Edit extends AbstractServlet {
             
             case "Editing":
                 
-                String surname = request.getParameter("surname").replaceAll("[' \"]","");
-                String name = request.getParameter("name").replaceAll("[' \"]","");
-                String patronymic = request.getParameter("patronymic").replaceAll("[' \"]","");
-                String email = request.getParameter("email").replaceAll("[' \"]","");
-                                
+                surname = request.getParameter("surname").replaceAll("[' \"]","");
+                name = request.getParameter("name").replaceAll("[' \"]","");
+                patronymic = request.getParameter("patronymic").replaceAll("[' \"]","");
+                email = request.getParameter("email").replaceAll("[' \"]","");
+                
                 query = "update candidates set surname = '" + surname
                         + "', name = '" + name
                         + "', patronymic = '" + patronymic
@@ -64,29 +68,29 @@ public class Edit extends AbstractServlet {
                         + "', project = '" + request.getParameter("project")
                         + "', status = '" + request.getParameter("status")
                         + "', dates = '" + request.getParameter("dates")
-                        + "', times = '" + request.getParameter("times")
+                        + "', times = '" + request.getParameter("times") + ":00"
                         + "', channel = '" + request.getParameter("channel")
                         + "', advertising = '" + request.getParameter("advertising")
-                        //+ "', reason = '" + reason
-                        + "', branch = '" + request.getParameter("branch") + "' where phonenumber = '" + candidateNumber + "'";
+                        + "', branch = '" + request.getParameter("branch");
+                        
+                        if (!request.getParameter("status").equals(request.getSession().getAttribute("status"))) {
+                            System.out.println("parameter: " + request.getParameter("status") + ", Attribute: " + request.getSession().getAttribute("status"));
+                            if (status.equals("1) пригл. на собесед.")) query += "', interview = '" + changedStatus;
+                            if (status.equals("2) пригл. на обучение")) query += "', study = '" + changedStatus;
+                            //if (status.equals("3) на обучении")) query += "', studying = '" + changedStatus;
+                            if (status.equals("4) выход на линию")) query += "', beginwork = '" + changedStatus;
+                            //if (status.equals("5) на линии")) query += "', working = '" + changedStatus;
+                            if (status.equals("6) уволен")) query += "', refused = '" + changedStatus;
+                            if (status.equals("X) отказ")) query += "', failure = '" + changedStatus;
+                            if (status.equals("X) отказался")) query += "', fired = '" + changedStatus;
+                            if (status.equals("X) не выходит на связь")) query += "', notresponding = '" + request.getParameter("changedStatus");
+                            if (reason != null) query += "', reason = '" + request.getParameter("reason");
+                        }
+
+                        query += "' where phonenumber = '" + candidateNumber + "'";
+                        
                 System.out.println("Edit.java > QUERY: " + query);          
                 
-                // пишем историю изменения статусов
-                if (!request.getParameter("status").equals(request.getSession().getAttribute("status"))) {
-                    String changedStatus = null;
-                    if (!request.getParameter("status").equals("3) на обучении") && !request.getParameter("status").equals("5) на линии")) 
-                        changedStatus = request.getParameter("changedStatus");
-
-                    String reason = request.getParameter("reason");
-                    if (reason == null) reason = "–";
-                    
-                    queryStatus = "insert into statuses(phonenumber, status, dates, reason) values('"
-                            + request.getParameter("phonenumber") + "','"
-                            + request.getParameter("status") + "','"
-                            + changedStatus + "','"
-                            + reason + "')";
-                    System.out.println("Edit.java > QUERY (status): " + queryStatus);
-                }
                 
                 // сохраняем в переменные старые и новые значения даты и времени
                 String oldTime = request.getSession().getAttribute("times").toString().substring(0, 5);
@@ -98,7 +102,7 @@ public class Edit extends AbstractServlet {
                 if (!oldDate.equals(newDate) || !oldTime.equals(newTime)) {
                     if (!oldDate.equals(newDate)) System.out.println("> Изменилась дата собеседования с " + oldDate + " на " + newDate);
                     if (!oldTime.equals(newTime)) System.out.println("> Изменилось время собеседования с " + oldTime + " на " + newTime);
-                    sender.send(
+                    SENDER.send(
                             "Приглашение на вебинар \"БизнесФон\"", "Добрый день, "
                             + request.getParameter("name")
                             + " "
@@ -122,7 +126,6 @@ public class Edit extends AbstractServlet {
                     } else {
                         redirect("/hr");
                         statement.executeUpdate(query);
-                        statement.executeUpdate(queryStatus);
                     } 
                 } catch (SQLException e) {
                     System.out.println("CRASHED! " + e.getLocalizedMessage());

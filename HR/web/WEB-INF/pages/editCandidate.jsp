@@ -89,8 +89,8 @@
                         String query;
                         ResultSet rs = null;
 
-                        LocalDate date = LocalDate.parse(String.valueOf(request.getSession().getAttribute("dates")), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                        String displayDate = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
+                        //LocalDate date = LocalDate.parse(String.valueOf(request.getSession().getAttribute("dates")), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                        //String displayDate = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
 
                         Calendar calendar = (Calendar) Calendar.getInstance();
                         int currentMonth = calendar.getTime().getMonth();
@@ -368,7 +368,7 @@
             </div>
 
             <div id="statusdate">
-                <%
+                <%/*
                     String queryStatus = "select status, dates from statuses where phonenumber = '" + candidateNumber + "'";
                     rs = statement.executeQuery(queryStatus);
                     while (rs.next()) {
@@ -381,7 +381,7 @@
                     statement.close();
                     statement = null;
                     rs.close();
-                    rs = null;
+                    rs = null;*/
                 %> 
             </div>
         </div>

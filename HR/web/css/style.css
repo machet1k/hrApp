@@ -134,7 +134,7 @@ hr {
 }
 
 .containerDownload {
-    width: 1800px;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -238,8 +238,12 @@ body {
     margin-left: 4px;
 }
 
-.fill {
+.fillBlue {
     background-color: #337ab7;
+}
+
+.fillRed {
+    background-color: #d9534f;
 }
 
 td tr {
@@ -249,4 +253,9 @@ td tr {
 
 #reason, #noteToStatus {
     display: none;
+}
+
+.bigfontsize {
+    font-size: 1.8em;
+    text-align: center;
 }

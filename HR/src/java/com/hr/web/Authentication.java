@@ -20,8 +20,8 @@ public class Authentication extends AbstractServlet {
     //private static final com.hr.helpers.Sender sender = new com.hr.helpers.Sender("haritonov.r@b-fon.ru", "m9VCPPmN");    
     private static final com.hr.helpers.Sender SENDER = new com.hr.helpers.Sender("neutrinoteammachet1k@gmail.com", "decbblec0olP");
 
-    private static final String HR = "HR";
-    private static final String PASS_HR = "biznesfon";
+    private static final String USER = "user";
+    private static final String PASS_USER = "biznesfon";
 
     private static final String MANAGER = "manager";
     private static final String PASS_MANAGER = "biznesfon";
@@ -88,7 +88,7 @@ public class Authentication extends AbstractServlet {
         request.getSession().setAttribute("search", "false");
 
         Credentials credentials = new Credentials(request);
-        if (credentials.equals(new Credentials(HR, PASS_HR))
+        if (credentials.equals(new Credentials(USER, PASS_USER))
          || credentials.equals(new Credentials(MANAGER, PASS_MANAGER))) {
             session.setAttribute("role", credentials.getLogin());
             session.setAttribute("isAuth", true);
@@ -122,7 +122,7 @@ public class Authentication extends AbstractServlet {
         String patronymic = request.getParameter("patronymic").replaceAll("[' \"]","");
         String email = request.getParameter("email").replaceAll("[' \"]","");
         
-        String query = "insert into candidates(surname, name, patronymic, phonenumber, email, status, project, branch, dates, times, channel, advertising, manager) values('"
+        String query = "insert into candidates(surname, name, patronymic, phonenumber, email, status, project, branch, dates, times, channel, advertising, manager, interview) values('"
                 + surname
                 + "','" + name
                 + "','" + patronymic
@@ -135,7 +135,9 @@ public class Authentication extends AbstractServlet {
                 + "','" + request.getSession().getAttribute("times")
                 + "','" + request.getParameter("channel")
                 + "','" + request.getParameter("advertising")
-                + "','" + request.getSession().getAttribute("role") + "')";
+                + "','" + request.getSession().getAttribute("role") 
+                + "','" + request.getSession().getAttribute("dates")
+                + "')";
         
         SENDER.send(
                 "Приглашение на вебинар \"БизнесФон\"\n\n", "Добрый день, "
@@ -147,13 +149,6 @@ public class Authentication extends AbstractServlet {
                 + request.getSession().getAttribute("times") + ".\n\nС уважением, HR-менеджер \"БизнесФон\".",
                 request.getParameter("email")
         );
-
-        String queryStatus = "insert into statuses(phonenumber, status, dates, reason) values('"
-                + request.getParameter("phonenumber") + "','"
-                + /*request.getParameter("status")*/ "1) пригл. на собесед.','"
-                + request.getSession().getAttribute("dates") + "','-')";
-        System.out.println(queryStatus);
-
         
         try (Connection connection = DriverManager.getConnection(url, username, password);
             Statement statement = connection.createStatement()){
@@ -162,7 +157,6 @@ public class Authentication extends AbstractServlet {
                 forward("/isEmpty.html");
             } else {
                 statement.executeUpdate(query);
-                statement.executeUpdate(queryStatus);
                 redirect("/hr");
                 System.out.println(query);
             }

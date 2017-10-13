@@ -70,7 +70,9 @@
     <body>
 
         <a href="/hr/sign-out" class="pull-right btn btn-link">Выход [<% out.print(session.getAttribute("role")); %>]</a>
-        <a target="_blank" rel="nofollow noopener" href="http://biznesfon.ru"><img class="logimg" src="https://s8.hostingkartinok.com/uploads/images/2017/10/96bfde63dbe76ee39596a1cbed77c3bb.png" alt="logotype"></a>
+        <a target="blank" href="http://biznesfon.ru">
+            <img class="logimg" src="https://s8.hostingkartinok.com/uploads/images/2017/10/96bfde63dbe76ee39596a1cbed77c3bb.png" alt="logotype"/>
+        </a>
 
         <div class="containerIndex">
             <div class="row">
@@ -122,14 +124,15 @@
                                         if (day < 10) prepareDay = ("0" + day);
                                         else prepareDay = "" + day;
 
-                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
+                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "' and status = '1) пригл. на собесед.'";
                                         System.out.println("currentMonth -->: " + query);
                                         rs = statement.executeQuery(query);
                                         rs.next();
                                         if (("2017-" + prepareMonth + "-" + prepareDay).equals(dates)) checked = "checked";
 
                                         String fill = "";
-                                        if (!rs.getString(1).equals("0")) fill = "fill";
+                                        if (Integer.parseInt(rs.getString(1)) > 180) fill = "fillRed";
+                                        else if (Integer.parseInt(rs.getString(1)) > 0) fill = "fillBlue";
 
                                         out.print("<li><label><input onClick='this.form.submit()' "
                                                 + checked + " required type='radio' name='dates' value='2017-"
@@ -153,7 +156,8 @@
                                         if (("2017-" + prepareMonth + "-" + prepareDay).equals(dates)) checked = "checked";
 
                                         String fill = "";
-                                        if (!rs.getString(1).equals("0")) fill = "fill";
+                                        if (Integer.parseInt(rs.getString(1)) > 180) fill = "fillRed";
+                                        else if (Integer.parseInt(rs.getString(1)) > 0) fill = "fillBlue";
 
                                         out.print("<li><label><input onClick='this.form.submit()' "
                                                 + checked + " required type='radio' name='dates' value='2017-"
@@ -206,9 +210,9 @@
                                             }
 
                                             String fill = "";
-                                            if (!rs.getString(1).equals("0")) {
-                                                fill = "fill";
-                                            }
+                                            if (Integer.parseInt(rs.getString(1)) > 10) fill = "fillRed";
+                                            else if (Integer.parseInt(rs.getString(1)) > 0) fill = "fillBlue";
+                                        
                                             out.print("<li><label><input onClick='this.form.submit()' "
                                                     + checked + " required type='radio' name='times' value='" + hoursFrom + minutesFrom + "'>"
                                                     + hoursFrom + minutesFrom + " – " + hoursTo + minutesTo + "</label><span class='badge " + fill + "'>"
@@ -249,7 +253,7 @@
                                 <%
                                     query = "SELECT * FROM candidates where dates = '" + dates
                                             + "' and times = '" + times
-                                            + "' and branch = '" + branch + "'";
+                                            + "' and branch = '" + branch + "' and status = '1) пригл. на собесед.'";
                                     System.out.println("index > QUERY: " + query);
                                     connection = DriverManager.getConnection(url, username, password);
                                     statement = connection.createStatement();
