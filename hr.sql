@@ -1,3 +1,27 @@
-create table candidates(id int not null generated always as identity(start with 1, increment by 1),surname varchar(20) not null,name varchar(20) not null,patronymic varchar(20) not null,phonenumber varchar(10) not null,status varchar(20) not null,dates date not null,times time not null);
+drop table candidates;
 
-create table statuses(id int not null generated always as identity(start with 1, increment by 1),phonenumber varchar(10) not null,status varchar(20) not null,dates date not null,times time not null);
+create table candidates(id int not null generated always as identity(start with 1, increment by 1),
+surname varchar(100) not null,
+name varchar(100) not null,
+patronymic varchar(100) not null,
+phonenumber varchar(100) not null,
+email varchar(100) not null,
+status varchar(100) not null,
+project varchar(100) not null,
+branch varchar(100) not null,
+dates date not null,
+times time not null,
+channel varchar(100) not null,
+advertising varchar(100) not null,
+regtime timestamp default current_timestamp,
+manager varchar(100) not null,
+interview date,
+study date,
+studying date,
+beginwork date,
+working date,
+refused date,
+failure date,
+fired date,
+notresponding date,
+reason varchar(100));
