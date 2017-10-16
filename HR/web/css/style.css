@@ -91,8 +91,14 @@ hr {
     font-size: 16px;
 }
 
+.containerIndex .panel-body {
+    height: 670px;
+    overflow: auto;
+    /*background-color: rgba(255, 255, 255, 0.5);
+*/}
+
 .containerIndex {
-    width: 1310px;
+    width: 1314px;
     margin: 0 auto;
     position: relative;
 }
@@ -107,19 +113,13 @@ hr {
     margin: 0 auto;
 }
 
-.containerIndex .panel-body {
-    height: 670px;
-    overflow: auto;
-    /*background-color: rgba(255, 255, 255, 0.5);
-*/}
-
 #date, #time, #candidates {
     float: left;
     padding: 7px;
 }
 
 #date, #time {
-    width: 215px;
+    width: 217px;
 }
 
 #candidates {

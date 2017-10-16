@@ -79,7 +79,7 @@
                 <form action="Search" method="Post">
                     <div class="pull-right"> 
                         <input required class="phonenumber" type="text" name="phonenumber" placeholder="9115557799" pattern="[9]{1}[0-9]{9}">
-                        <button class="pull-right btn btn-link searchbtn" type="submit" name="action" value="SetBranch" ><!--&#128269;-->Поиск</button>
+                        <button class="pull-right btn btn-link searchbtn" type="submit" name="action" value="SetBranch" >Поиск</button>
                     </div>
                 </form>
 
@@ -87,15 +87,29 @@
                     <div class="align_right">
 
                         <button type="submit" name="action" value="SetBranch" class="pull-right btn btn-link choose">Выбрать</button>
-                        <% out.print("<select data-width='175px' class='gap-bottom branch selectpicker show-tick' name='branch' required>"
-                                    + "<option selected>" + branch + "</option>"
-                                    + "<option value='СанктПетербург'>Санкт-Петербург</option>"
-                                    + "<option>Димитровград</option>"
-                                    + "<option>Рефтинский</option>"
-                                    + "<option>Асбест</option>"
-                                    + "<option>Челябинск</option>"
-                                    + "<option value='ДО'>Домашний Оператор</option></select>");
-                        %>
+                        <select data-width='175px' class='gap-bottom branch selectpicker show-tick' name='branch' required>
+                            <%
+                                String spb = "", dmt = "", rft = "", asb = "", chl = "", dom = "";
+
+                                if ("СанктПетербург".equals(session.getAttribute("branch")))       { spb = "selected";}
+                                else if ("Димитровград".equals(session.getAttribute("branch")))    { dmt = "selected";}
+                                else if ("Рефтинский".equals(session.getAttribute("branch")))      { rft = "selected";}
+                                else if ("Асбест".equals(session.getAttribute("branch")))          { asb = "selected";}
+                                else if ("Челябинск".equals(session.getAttribute("branch")))       { chl = "selected";}
+                                else if ("ДО".equals(session.getAttribute("branch")))              { dom = "selected";}
+
+                                out.print(
+                                    "<option " + spb + " value='СанктПетербург'>Санкт-Петербург</option>"
+                                  + "<option " + dmt + " >Димитровград</option>"
+                                  + "<option " + rft + " >Рефтинский</option>"
+                                  + "<option " + asb + " >Асбест</option>"
+                                  + "<option " + chl + " >Челябинск</option>"
+                                  + "<option " + dom + " value='ДО'>Домашний оператор</option>");
+
+                            %>
+                        </select>
+                        
+                        
                     </div>
                     <h3><span>Human Resourse App:</span> Набор персонала БизнесФон.</h3>
 
@@ -124,7 +138,7 @@
                                         if (day < 10) prepareDay = ("0" + day);
                                         else prepareDay = "" + day;
 
-                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "' and status = '1) пригл. на собесед.'";
+                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
                                         System.out.println("currentMonth -->: " + query);
                                         rs = statement.executeQuery(query);
                                         rs.next();
@@ -133,6 +147,7 @@
                                         String fill = "";
                                         if (Integer.parseInt(rs.getString(1)) > 180) fill = "fillRed";
                                         else if (Integer.parseInt(rs.getString(1)) > 0) fill = "fillBlue";
+                                        
 
                                         out.print("<li><label><input onClick='this.form.submit()' "
                                                 + checked + " required type='radio' name='dates' value='2017-"
@@ -149,7 +164,7 @@
                                         if (day < 10) prepareDay = ("0" + day);
                                         else prepareDay = "" + day;
 
-                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
+                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "' and status = '1) пригл. на собесед.'";
                                         System.out.println("nextMonth -->: " + query);
                                         rs = statement.executeQuery(query);
                                         rs.next();
@@ -199,10 +214,9 @@
                                                 minutesTo = ":00";
                                                 hoursTo = hoursFrom + 1;
                                             }
-                                            query = "SELECT count(*) FROM candidates where dates = '" 
-                                                    + dates + "' and times = '" 
-                                                    + hoursFrom + minutesFrom + "' and branch = '" 
-                                                    + branch + "' and status = '1) пригл. на собесед.'";
+                                            query = "SELECT count(*) FROM candidates where dates = '" + dates
+                                                    + "' and times = '" + hoursFrom + minutesFrom
+                                                    + "' and branch = '" + branch + "' and status = '1) пригл. на собесед.'";
                                             rs = statement.executeQuery(query);
                                             rs.next();
                                             if ((hoursFrom + minutesFrom).equals(times) || (hoursFrom + minutesFrom + ":00").equals(times)) {
@@ -237,64 +251,53 @@
                                 <button type="submit" name="action" value="Edit" class="pull-right btn btn-warning">Изменить</button>
                             </div>
                             <div class="panel-body">
-                                <div class='stroke header'>
-                                    <div class="verywider">Фамилия Имя Отчество</div>
-                                    <!--div class="normal">Фамилия</div>
-                                    <div class="normal">Имя</div>
-                                    <div class="normal">Отчество</div-->
-                                    <div class="normal">Телефон</div>
-                                    <div class="wider">e-mail</div>
-                                    <div class="normal">Проект</div>
-                                    <div class="wider">Статус</div>
-                                    <!--div class="narrower">Action</div-->
-                                    <!--div class="normal">Менеджер</div-->
-                                </div>
-                                <hr>
-                                <%
-                                    query = "SELECT * FROM candidates where dates = '" + dates
+                                <table>
+                                    <tr class="bold">
+                                        <td>Фамилия Имя Отчество</td>
+                                        <td>Телефон</td>
+                                        <td>email</td>
+                                        <td>Проект</td>
+                                        <td>Статус</td>
+                                        <td></td>
+
+                                    <%
+                                        query = "SELECT * FROM candidates where dates = '" + dates
                                             + "' and times = '" + times
                                             + "' and branch = '" + branch + "' and status = '1) пригл. на собесед.'";
                                     System.out.println("index > QUERY: " + query);
-                                    connection = DriverManager.getConnection(url, username, password);
-                                    statement = connection.createStatement();
-                                    rs = statement.executeQuery(query);
+                                        connection = DriverManager.getConnection(url, username, password);
+                                        statement = connection.createStatement();
+                                        rs = statement.executeQuery(query);
 
-                                    while (rs.next()) {
+                                        while (rs.next()) {
 
-                                        String shortEmail = rs.getString(6);
-                                        if (shortEmail.length() > 20) {
-                                            shortEmail = shortEmail.substring(0, 20).concat("..");
+                                            out.print("<tr><td>" + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4) + "</td>"
+                                                + "<td>" + rs.getString(5) + "</td>"
+                                                + "<td title='" + rs.getString(6) + "'>" + rs.getString(6) + "</td>"
+                                                + "<td>" + rs.getString(8) + "</td>"
+                                                + "<td>" + rs.getString(7) + "</td>"
+                                                + "<td><input required type='radio' name='candidate' value='" + rs.getString(5) + "'></td></tr>");
                                         }
 
-                                        out.print("<label><input required type='radio' name='candidate' value='" + rs.getString(5) + "'><div class='stroke'>"
-                                                + "<div class='verywider'>" + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4) + "</div>"
-                                                /*+ "<div class='normal'>" + rs.getString(3) + "</div>"
-                                                + "<div class='normal'>" + rs.getString(4) + "</div>"*/
-                                                + "<div class='normal'>" + rs.getString(5) + "</div>"
-                                                + "<div class='wider' title='" + rs.getString(6) + "'>" + shortEmail + "</div>"
-                                                + "<div class='normal'>" + rs.getString(8) + "</div>"
-                                                /*+ "<div class='normal'>" + rs.getString(15) + "</div>"*/
-                                                + "<div class='wider'>" + rs.getString(7) + "</div>"
-                                                /*+ "<div class='narrower'><button class='btn btn-warning btn-xs' type='button'>Ред.</button></div>"*/
-                                                + "</div></label>");
-                                    }
-                                    request.getSession().setAttribute("search", "false");
-                                    request.getSession().setAttribute("dateSearch", null);
-                                    request.getSession().setAttribute("timeSearch", null);
-                                    request.getSession().setAttribute("branchSearch", null);
-                                    
-                                    connection.close();
-                                    connection = null;
-                                    statement.close();
-                                    statement = null;
-                                    rs.close();
-                                    rs = null; 
-                                %>
-                                <hr>
+                                        request.getSession().setAttribute("search", "false");
+                                        request.getSession().setAttribute("dateSearch", null);
+                                        request.getSession().setAttribute("timeSearch", null);
+                                        request.getSession().setAttribute("branchSearch", null);
+
+                                        connection.close();
+                                        connection = null;
+                                        statement.close();
+                                        statement = null;
+                                        rs.close();
+                                        rs = null;                                    
+
+                                    %>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </form>
+                                
                 <div class="sign"> 
                     &copy; This application has been developed by Roman Kharitonov. All rights reserved.
                 </div> 
