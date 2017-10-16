@@ -20,7 +20,7 @@ ul li {
 }
 
 ul {
-    padding-left: 15px;
+    margin-left: 10px;
 }
 
 label {
@@ -66,44 +66,12 @@ align_left {
     font: 800 120px Tahoma;
 }
 
-.stroke {
-    float: left; 
+.bold  {
+    font-weight: 900;
+}
+
+tr td {
     text-align: center;
-}
-
-.stroke .normal {
-    float: left; 
-    width: 115px; 
-    height: 25px;
-    
-}
-
-.stroke .wider {
-    float: left; 
-    width: 200px; 
-    height: 25px;
-    
-}
-
-.stroke .verywider {
-    float: left; 
-    width: 230px; 
-    height: 25px;
-    
-}
-
-.stroke .narrower {
-    float: left; 
-    width: 40px; 
-    height: 25px;
-    
-}
-
-.stroken div {
-    float: left; 
-    width: 127px; 
-    height: 25px;
-    
 }
 
 .header {
@@ -124,8 +92,9 @@ hr {
 }
 
 .containerIndex {
-    width: 1480px;
+    width: 1310px;
     margin: 0 auto;
+    position: relative;
 }
 
 .containerEdit {
@@ -134,7 +103,7 @@ hr {
 }
 
 .containerDownload {
-    width: 100%;
+
     margin: 0 auto;
 }
 
@@ -144,17 +113,20 @@ hr {
     /*background-color: rgba(255, 255, 255, 0.5);
 */}
 
-#date, #time {
-    width: 260px;
+#date, #time, #candidates {
     float: left;
     padding: 7px;
 }
 
-#candidates {
-    width: 940px;
-    float: left;
-    padding: 7px;
+#date, #time {
+    width: 215px;
 }
+
+#candidates {
+    width: 880px;
+}
+
+
 
 #download div {
     display: inline-block;
@@ -181,8 +153,8 @@ body {
 .logimg {
     position: absolute;
     width: 200px;
-    top: 820px;
-    left: 1700px;
+    bottom: 20px;
+    right: 20px;
     opacity: 0.4;                      
 }
 
@@ -218,8 +190,7 @@ body {
 }
 
 .downloadbtn {
-    margin-top: 15px;
-    margin-right: 20px;
+    margin: 15px 20px 0 0;
 }
 
 .row {
@@ -228,6 +199,12 @@ body {
 
 .bigfont {
     font-size: 20px;
+    margin: 0;
+}
+
+.bigfont22{
+    font-size: 22px;
+    margin: 0;
 }
 
 .choose {

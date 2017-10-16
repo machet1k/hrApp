@@ -251,70 +251,58 @@
                                 <button type="submit" name="action" value="Edit" class="pull-right btn btn-warning">Изменить</button>
                             </div>
                             <div class="panel-body">
-                                <div class='stroke header'>
-                                    <div class="verywider">Фамилия Имя Отчество</div>
-                                    <!--div class="normal">Фамилия</div>
-                                    <div class="normal">Имя</div>
-                                    <div class="normal">Отчество</div-->
-                                    <div class="normal">Телефон</div>
-                                    <div class="wider">e-mail</div>
-                                    <div class="normal">Проект</div>
-                                    <div class="wider">Статус</div>
-                                    <!--div class="narrower">Action</div-->
-                                    <!--div class="normal">Менеджер</div-->
-                                </div>
-                                <hr>
-                                <%
-                                    query = "SELECT * FROM candidates where dates = '" + dates
-                                            + "' and times = '" + times
-                                            + "' and branch = '" + branch + "'";
-                                    System.out.println("index > QUERY: " + query);
-                                    connection = DriverManager.getConnection(url, username, password);
-                                    statement = connection.createStatement();
-                                    rs = statement.executeQuery(query);
+                                <table>
+                                    <tr class="bold">
+                                        <td>Фамилия Имя Отчество</td>
+                                        <td>Телефон</td>
+                                        <td>email</td>
+                                        <td>Проект</td>
+                                        <td>Статус</td>
+                                        <td></td>
 
-                                    while (rs.next()) {
+                                    <%
+                                        query = "SELECT * FROM candidates where dates = '" + dates
+                                                + "' and times = '" + times
+                                                + "' and branch = '" + branch + "'";
+                                        System.out.println("index > QUERY: " + query);
+                                        connection = DriverManager.getConnection(url, username, password);
+                                        statement = connection.createStatement();
+                                        rs = statement.executeQuery(query);
 
-                                        String shortEmail = rs.getString(6);
-                                        if (shortEmail.length() > 20) {
-                                            shortEmail = shortEmail.substring(0, 20).concat("..");
+                                        while (rs.next()) {
+
+                                            out.print("<tr><td>" + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4) + "</td>"
+                                                + "<td>" + rs.getString(5) + "</td>"
+                                                + "<td title='" + rs.getString(6) + "'>" + rs.getString(6) + "</td>"
+                                                + "<td>" + rs.getString(8) + "</td>"
+                                                + "<td>" + rs.getString(7) + "</td>"
+                                                + "<td><input required type='radio' name='candidate' value='" + rs.getString(5) + "'></td></tr>");
                                         }
 
-                                        out.print("<label><input required type='radio' name='candidate' value='" + rs.getString(5) + "'><div class='stroke'>"
-                                                + "<div class='verywider'>" + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4) + "</div>"
-                                                /*+ "<div class='normal'>" + rs.getString(3) + "</div>"
-                                                + "<div class='normal'>" + rs.getString(4) + "</div>"*/
-                                                + "<div class='normal'>" + rs.getString(5) + "</div>"
-                                                + "<div class='wider' title='" + rs.getString(6) + "'>" + shortEmail + "</div>"
-                                                + "<div class='normal'>" + rs.getString(8) + "</div>"
-                                                /*+ "<div class='normal'>" + rs.getString(15) + "</div>"*/
-                                                + "<div class='wider'>" + rs.getString(7) + "</div>"
-                                                /*+ "<div class='narrower'><button class='btn btn-warning btn-xs' type='button'>Ред.</button></div>"*/
-                                                + "</div></label>");
-                                    }
-                                    request.getSession().setAttribute("search", "false");
-                                    request.getSession().setAttribute("dateSearch", null);
-                                    request.getSession().setAttribute("timeSearch", null);
-                                    request.getSession().setAttribute("branchSearch", null);
-                                    
-                                    connection.close();
-                                    connection = null;
-                                    statement.close();
-                                    statement = null;
-                                    rs.close();
-                                    rs = null;                                    
+                                        request.getSession().setAttribute("search", "false");
+                                        request.getSession().setAttribute("dateSearch", null);
+                                        request.getSession().setAttribute("timeSearch", null);
+                                        request.getSession().setAttribute("branchSearch", null);
 
-                                %>
-                                <hr>
+                                        connection.close();
+                                        connection = null;
+                                        statement.close();
+                                        statement = null;
+                                        rs.close();
+                                        rs = null;                                    
+
+                                    %>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </form>
 
                 <form action="Download" method="Get" target="_blank">
-                    <div id="download">
-
+                    <div id="download"> 
+                        <div class="bigfont">
                         
+                        </div>
                         <div>
                             <select class="gap-bottom" name="branch">
                                 <option selected disabled value=''>Площадка</option>
@@ -336,12 +324,13 @@
                                 else prepareDay = "" + currentDay;
                         %>
                         
-                        <div>c</div>
+                        <div>с</div>
                         <% out.print("<div><input type='date' name='from' required value='2017-" + prepareMonth + "-" + prepareDay + "'></div>"); %>
                         <div>по</div>
                         <% out.print("<div><input type='date' name='to' required value='2017-" + prepareMonth + "-" + calendar.getActualMaximum(Calendar.DAY_OF_MONTH) + "'></div>"); %>
                         
-                        <div><select class="gap-bottom" name="status">
+                        <div>
+                            <select class="gap-bottom" name="status">
                                 <option selected disabled value=''>Статус</option>
                                 <option>1) пригл. на собесед.</option>
                                 <option>2) пригл. на обучение</option>
@@ -352,7 +341,8 @@
                                 <option>X) отказ</option>
                                 <option>X) отказался</option>
                                 <option>X) не выходит на связь</option>
-                            </select></div>
+                            </select>
+                        </div>
 
                         <div><select class="gap-bottom" name="project">
                                 <option selected disabled value=''>Проект</option>
@@ -400,10 +390,9 @@
                                 <option>chelyabinsk.sopta.ru</option>
                             </select></div>
 
-                        <div class="downloadbtn">
-                            <button type="submit" class="btn btn-primary">Выгрузить</button>
-                            <button type="reset" class="btn">Очистить</button>
-                        </div>
+                        <button type="reset" class="btn pull-right">Очистить</button>
+                        <button type="submit" class="btn btn-primary pull-right">Выгрузить</button>
+                            
                     </div> 
                 </form>
                 <div class="sign"> 
