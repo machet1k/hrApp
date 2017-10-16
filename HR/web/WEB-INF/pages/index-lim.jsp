@@ -138,7 +138,7 @@
                                         if (day < 10) prepareDay = ("0" + day);
                                         else prepareDay = "" + day;
 
-                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
+                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "' and status = '1) пригл. на собесед.'";
                                         System.out.println("currentMonth -->: " + query);
                                         rs = statement.executeQuery(query);
                                         rs.next();
