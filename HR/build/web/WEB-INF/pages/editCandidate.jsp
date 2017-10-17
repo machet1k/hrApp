@@ -29,38 +29,23 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
         <script>
-            /* var СанктПетербург = Array('HeadHunter', 'SuperJob', 'Avito', 'Сайт Грузовичкоф', 'Сайт Таксовичкоф', 'Сайт БизнесФон', 'Яндекс.Работа', 'Rabota.ru', 'Знакомые', 'Не помнят');
-            var Димитровград = СанктПетербург.concat(Array('trisosny.ru', '25kanal.ru', 'dimitrovgradros.flagma.ru'));
-            var Асбест = СанктПетербург.concat(Array('maxz.ru', 'asbest-gid.ru', 'asbest.name', 'asbet.ru', 'asbest-online.ru'));
-            var Рефтинский = СанктПетербург.concat(Array('reftinskiy.ru', 'reftnews.ru'));
-            var Челябинск = СанктПетербург.concat(Array('74.ru', 'chel.barahla.net', 'ubu.ru/chelyabinsk', 'chelyabinsk.gde.ru', 'chelyabinsk.dorus.ru', 'chelyabinsk.bestru.ru', 'chelyabinsk.sopta.ru'));
-            var ДО = СанктПетербург.concat(Array('HeadHunter', 'SuperJob', 'Avito', 'Сайт Грузовичкоф', 'Сайт Таксовичкоф', 'Сайт БизнесФон', 'Яндекс.Работа', 'Rabota.ru'));
-
-            function showAdv(v) {
-                var mas = eval(v);
-                var el = document.getElementById('adv');
-                while (el.childNodes.length > 0) {
-                    el.removeChild(el.childNodes[el.childNodes.length - 1]);
-                }
-                for (var i = 0; i < mas.length; i++) {
-                    var opt = document.createElement("option");
-                    opt.innerHTML = mas[i];
-                    el.appendChild(opt);
-                }
-            } */
-
             var requiredReason = "";
             var requiredNoteToStatus = "";
             
             function visible(v) {
-                if (v == "3) на обучении" || v == "5) на линии") {
+                if (v == "1) пригл. на собесед." || 
+                    v == "3) на обучении" || 
+                    v == "5) на линии") {
                     $('#changedStatus').css('display', 'none');
                     $("#changedStatus").removeAttr('required');
                 } else {
                     $('#changedStatus').css('display', 'inline');
                     $("#changedStatus").attr('required', '');
                 }
-                if (v == "6) уволен" || v == "X) отказ" || v == "X) отказался" || v == "X) не выходит на связь") {
+                if (v == "6) уволен" || 
+                    v == "X) отказ" || 
+                    v == "X) отказался" || 
+                    v == "X) не выходит на связь") {
                     $('#reason').css('display', 'inline');
                     $("#reason").attr('required', '');
                 } else {

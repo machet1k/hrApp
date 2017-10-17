@@ -71,11 +71,12 @@ public class Edit extends AbstractServlet {
                         + "', times = '" + request.getParameter("times") + ":00"
                         + "', channel = '" + request.getParameter("channel")
                         + "', advertising = '" + request.getParameter("advertising")
-                        + "', branch = '" + request.getParameter("branch");
+                        + "', branch = '" + request.getParameter("branch")
+                        + "', interview = '" + request.getParameter("dates");
                         
                         if (!request.getParameter("status").equals(request.getSession().getAttribute("status"))) {
                             System.out.println("parameter: " + request.getParameter("status") + ", Attribute: " + request.getSession().getAttribute("status"));
-                            if (status.equals("1) пригл. на собесед.")) query += "', interview = '" + changedStatus;
+                            //if (status.equals("1) пригл. на собесед.")) query += "', interview = '" + changedStatus;
                             if (status.equals("2) пригл. на обучение")) query += "', study = '" + changedStatus;
                             //if (status.equals("3) на обучении")) query += "', studying = '" + changedStatus;
                             if (status.equals("4) выход на линию")) query += "', beginwork = '" + changedStatus;
