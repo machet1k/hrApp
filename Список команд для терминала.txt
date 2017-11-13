@@ -1,0 +1,50 @@
+http://207.154.208.183:8080/hr/
+http://95.213.195.149:8080/hr/
+
+207.154.208.183 - Digital Ocean 
+95.213.195.149 - Vscale.io - 31321/hceVXAqJK7 - root/k85n3b4hgt
+
+
+sudo apt-get update
+sudo apt-get install default-jdk
+java -version
+cd /opt
+wget http://download.java.net/glassfish/4.1.1/release/glassfish-4.1.1.zip
+sudo apt-get install unzip
+unzip glassfish-4.1.1.zip
+rm glassfish-4.1.1.zip
+/opt/glassfish4/bin/asadmin start-domain
+
+
+/opt/glassfish4/bin/asadmin change-admin-password
+/opt/glassfish4/bin/asadmin enable-secure-admin
+/opt/glassfish4/bin/asadmin restart-domain
+/opt/glassfish4/bin/asadmin start-database --dbhome /opt/glassfish4/javadb
+
+drop table candidates;
+
+create table candidates(id int not null generated always as identity(start with 1, increment by 1),
+surname varchar(100) not null,
+name varchar(100) not null,
+patronymic varchar(100) not null,
+phonenumber varchar(100) not null,
+email varchar(100) not null,
+status varchar(100) not null,
+project varchar(100) not null,
+branch varchar(100) not null,
+dates date not null,
+times time not null,
+channel varchar(100) not null,
+advertising varchar(100) not null,
+regtime timestamp default current_timestamp,
+manager varchar(100) not null,
+interview date,
+study date,
+studying date,
+beginwork date,
+working date,
+refused date,
+failure date,
+fired date,
+notresponding date,
+reason varchar(100));
