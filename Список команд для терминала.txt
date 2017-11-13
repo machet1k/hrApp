@@ -1,9 +1,4 @@
-http://207.154.208.183:8080/hr/
-http://95.213.195.149:8080/hr/
-
 207.154.208.183 - Digital Ocean 
-95.213.195.149 - Vscale.io - 31321/hceVXAqJK7 - root/k85n3b4hgt
-
 
 sudo apt-get update
 sudo apt-get install default-jdk
