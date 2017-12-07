@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.util.Arrays"%>
 <%@page import="com.hr.web.Add"%>
@@ -35,7 +36,7 @@
         <link href="css/style.css" type="text/css" rel="stylesheet">
         
         <%
-            String url = "jdbc:derby://localhost:1527/hrdb";
+            String url = "jdbc:derby://207.154.208.183:1527/hrdb";
             String username = "root";
             String password = "bcenter";
             Connection connection = DriverManager.getConnection(url, username, password);
@@ -122,9 +123,14 @@
                                     String displayDate = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy", new Locale("ru")));
 
                                     Calendar calendar = (Calendar) Calendar.getInstance();
-                                    int currentMonth = calendar.getTime().getMonth() + 1;
-                                    int nextMonth = calendar.getTime().getMonth() + 2;
-                                    int currentDay = calendar.getTime().getDate();
+                                    Date time = calendar.getTime();
+                                    int currentYear = time.getYear() + 1900;
+                                    System.out.println(currentYear);
+                                    int currentMonth = time.getMonth() + 1;
+                                    int nextMonth = 0;
+                                    if (currentMonth == 12) nextMonth = 1;
+                                    else currentMonth++;
+                                    int currentDay = time.getDate();
                                     int countOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
                                     out.print("<h4><span>Месяц:</span></h4><ul>");
@@ -138,46 +144,47 @@
                                         if (day < 10) prepareDay = ("0" + day);
                                         else prepareDay = "" + day;
 
-                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
+                                        query = "SELECT count(*) FROM candidates where dates = '" + currentYear + "-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
                                         System.out.println("currentMonth -->: " + query);
                                         rs = statement.executeQuery(query);
                                         rs.next();
-                                        if (("2017-" + prepareMonth + "-" + prepareDay).equals(dates)) checked = "checked";
+                                        if ((currentYear + "-" + prepareMonth + "-" + prepareDay).equals(dates)) checked = "checked";
 
                                         String fill = "";
                                         if (Integer.parseInt(rs.getString(1)) > 180) fill = "fillRed";
                                         else if (Integer.parseInt(rs.getString(1)) > 0) fill = "fillBlue";
                                         
-
                                         out.print("<li><label><input onClick='this.form.submit()' "
-                                                + checked + " required type='radio' name='dates' value='2017-"
+                                                + checked + " required type='radio' name='dates' value='" + currentYear + "-"
                                                 + prepareMonth + "-" + prepareDay + "'>"
-                                                + prepareDay + "." + prepareMonth + ".2017</label><span class='badge " + fill + "'>" + rs.getString(1) + "</span></li>");
+                                                + prepareDay + "." + prepareMonth + "." + currentYear + "</label><span class='badge " + fill + "'>" + rs.getString(1) + "</span></li>");
                                     }
-  
+
+                                    if (currentMonth == 12) currentYear++;
+                                
                                     for (int day = 1; day < currentDay; day++) {
                                         String prepareDay, prepareMonth, checked = "";
-
+                                        
                                         if (nextMonth < 10) prepareMonth = ("0" + nextMonth);
                                         else prepareMonth = "" + nextMonth;
                                         
                                         if (day < 10) prepareDay = ("0" + day);
                                         else prepareDay = "" + day;
 
-                                        query = "SELECT count(*) FROM candidates where dates = '2017-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
+                                        query = "SELECT count(*) FROM candidates where dates = '" + currentYear + "-" + prepareMonth + "-" + prepareDay + "' and branch = '" + branch + "'";
                                         System.out.println("nextMonth -->: " + query);
                                         rs = statement.executeQuery(query);
                                         rs.next();
-                                        if (("2017-" + prepareMonth + "-" + prepareDay).equals(dates)) checked = "checked";
+                                        if ((currentYear + "-" + prepareMonth + "-" + prepareDay).equals(dates)) checked = "checked";
 
                                         String fill = "";
                                         if (Integer.parseInt(rs.getString(1)) > 180) fill = "fillRed";
                                         else if (Integer.parseInt(rs.getString(1)) > 0) fill = "fillBlue";
 
                                         out.print("<li><label><input onClick='this.form.submit()' "
-                                                + checked + " required type='radio' name='dates' value='2017-"
+                                                + checked + " required type='radio' name='dates' value='" + currentYear + "-"
                                                 + prepareMonth + "-" + prepareDay + "'>"
-                                                + prepareDay + "." + prepareMonth + ".2017</label><span class='badge " + fill + "'>" + rs.getString(1) + "</span></li>");
+                                                + prepareDay + "." + prepareMonth + "." + currentYear + "</label><span class='badge " + fill + "'>" + rs.getString(1) + "</span></li>");
                                     }
                                     
                                     
@@ -325,9 +332,9 @@
                         %>
                         
                         <div>с</div>
-                        <% out.print("<div><input type='date' name='from' required value='2017-" + prepareMonth + "-" + prepareDay + "'></div>"); %>
+                        <% out.print("<div><input type='date' name='from' required value='" + currentYear + "-" + prepareMonth + "-" + prepareDay + "'></div>"); %>
                         <div>по</div>
-                        <% out.print("<div><input type='date' name='to' required value='2017-" + prepareMonth + "-" + calendar.getActualMaximum(Calendar.DAY_OF_MONTH) + "'></div>"); %>
+                        <% out.print("<div><input type='date' name='to' required value='" + currentYear + "-" + prepareMonth + "-" + calendar.getActualMaximum(Calendar.DAY_OF_MONTH) + "'></div>"); %>
                         
                         <div>
                             <select class="gap-bottom" name="status">
